@@ -13,59 +13,18 @@ object StreakManager {
     @SuppressLint("NewApi")
     private val dateFormatter = DateTimeFormatter.ISO_LOCAL_DATE
 
-    /**
-     * Проверяет, должна ли привычка выполняться в указанную дату
-     */
     @RequiresApi(Build.VERSION_CODES.O)
     private fun shouldCompleteOnDate(task: Task, date: LocalDate): Boolean {
         val dayOfWeek = date.dayOfWeek.value - 1
 
         return when (task.repeat) {
-            1 -> true
+            1 -> true // Ежедневно
             2 -> task.days.getOrElse(dayOfWeek) { false }
             3 -> date.dayOfMonth == 1
             else -> false
         }
     }
 
-    /**
-     * Находит последнюю дату, когда привычка была выполнена в нужный день
-     */
-    @SuppressLint("NewApi")
-    private fun getLastValidCompletionDate(task: Task): LocalDate? {
-        val sortedDates = task.completionDates
-            .map { LocalDate.parse(it, dateFormatter) }
-            .sortedDescending()
-
-        for (date in sortedDates) {
-            if (shouldCompleteOnDate(task, date)) {
-                return date
-            }
-        }
-        return null
-    }
-
-    /**
-     * Считает, сколько РАБОЧИХ дней было между двумя датами (включая конечную)
-     */
-    @SuppressLint("NewApi")
-    private fun countRequiredDaysBetween(task: Task, startDate: LocalDate, endDate: LocalDate): Int {
-        var count = 0
-        var currentDate = startDate.plusDays(1)
-
-        while (!currentDate.isAfter(endDate)) {
-            if (shouldCompleteOnDate(task, currentDate)) {
-                count++
-            }
-            currentDate = currentDate.plusDays(1)
-        }
-
-        return count
-    }
-
-    /**
-     * Когда пользователь ВЫПОЛНИЛ привычку (поставил галочку)
-     */
     @SuppressLint("NewApi")
     fun onTaskCompleted(task: Task): Task {
         val today = LocalDate.now()
@@ -80,24 +39,7 @@ object StreakManager {
         }
 
         val newCompletionDates = (task.completionDates + todayString).sorted()
-
-        val lastValidDate = getLastValidCompletionDate(
-            task.copy(completionDates = newCompletionDates)
-        )
-
-        val newStreak = if (lastValidDate == null) {
-            1
-        } else {
-            val requiredDaysBetween = countRequiredDaysBetween(task, lastValidDate, today)
-
-            if (requiredDaysBetween == 1) {
-
-                task.streak + 1
-            } else {
-
-                1
-            }
-        }
+        val newStreak = calculateCurrentStreak(task, newCompletionDates)
 
         return task.copy(
             streak = newStreak,
@@ -106,9 +48,6 @@ object StreakManager {
         )
     }
 
-    /**
-     * Когда пользователь ОТМЕНИЛ выполнение (снял галочку)
-     */
     @SuppressLint("NewApi")
     fun onTaskUncompleted(task: Task): Task {
         val today = LocalDate.now()
@@ -119,24 +58,7 @@ object StreakManager {
         }
 
         val newCompletionDates = task.completionDates.filter { it != todayString }
-
-        val lastValidDate = getLastValidCompletionDate(
-            task.copy(completionDates = newCompletionDates)
-        )
-
-        val newStreak = if (lastValidDate == null) {
-            0
-        } else {
-            val todayDate = LocalDate.now()
-            val daysBetween = ChronoUnit.DAYS.between(lastValidDate, todayDate)
-
-            if (daysBetween <= 1) {
-                calculateStreakFromDates(newCompletionDates)
-            } else {
-
-                0
-            }
-        }
+        val newStreak = calculateCurrentStreak(task, newCompletionDates)
 
         return task.copy(
             streak = newStreak,
@@ -145,50 +67,169 @@ object StreakManager {
         )
     }
 
-    /**
-     * Рассчитываем streak на основе списка дат выполнений (только для ежедневных привычек)
-     * Для НЕежедневных используем другой расчёт
-     */
     @SuppressLint("NewApi")
-    private fun calculateStreakFromDates(dates: List<String>): Int {
-        if (dates.isEmpty()) return 0
+    private fun calculateCurrentStreak(task: Task, completionDates: List<String>): Int {
+        if (completionDates.isEmpty()) return 0
 
-        val sortedDates = dates
+        val sortedDates = completionDates
             .map { LocalDate.parse(it, dateFormatter) }
-            .sorted()
+            .sortedDescending()
 
-        var currentStreak = 1
-        var maxStreak = 1
+        return when (task.repeat) {
+            1 -> calculateDailyStreak(sortedDates)
+            2 -> calculateWeeklyStreak(task, sortedDates)
+            3 -> calculateMonthlyStreak(sortedDates)
+            else -> 0
+        }
+    }
 
-        for (i in 1 until sortedDates.size) {
-            val prevDate = sortedDates[i - 1]
-            val currDate = sortedDates[i]
+    @SuppressLint("NewApi")
+    private fun calculateDailyStreak(sortedDates: List<LocalDate>): Int {
+        if (sortedDates.isEmpty()) return 0
 
-            if (ChronoUnit.DAYS.between(prevDate, currDate) == 1L) {
-                currentStreak++
-                maxStreak = maxOf(maxStreak, currentStreak)
-            } else {
-                currentStreak = 1
+        val today = LocalDate.now()
+        var streak = 0
+        var expectedDate = today
+
+        for (date in sortedDates) {
+            when {
+                date == expectedDate -> {
+                    streak++
+                    expectedDate = expectedDate.minusDays(1)
+                }
+                date.isBefore(expectedDate) -> {
+
+                    break
+                }
+                else -> {
+
+                    break
+                }
             }
         }
 
-        val lastDate = sortedDates.last()
-        val today = LocalDate.now()
 
-        return if (ChronoUnit.DAYS.between(lastDate, today) <= 1) {
-            currentStreak
+        val lastCompletionDate = sortedDates.first()
+        val daysSinceLastCompletion = ChronoUnit.DAYS.between(lastCompletionDate, today)
+
+        return if (daysSinceLastCompletion <= 1) {
+            streak
         } else {
             0
         }
     }
 
-    /**
-     * Сброс галочки в начале нового дня
-     */
+    @SuppressLint("NewApi")
+    private fun calculateWeeklyStreak(task: Task, sortedDates: List<LocalDate>): Int {
+        if (sortedDates.isEmpty()) return 0
+
+        val today = LocalDate.now()
+        val completedDatesSet = sortedDates.toSet()
+
+        var currentWorkingDay = findLastWorkingDay(task, today)
+
+        if (currentWorkingDay == null) return 0
+
+
+        if (!completedDatesSet.contains(currentWorkingDay) && currentWorkingDay != today) {
+            return 0
+        }
+
+        if (currentWorkingDay == today && !completedDatesSet.contains(today)) {
+            val previousDay = findPreviousWorkingDay(task, today)
+            if (previousDay != null && completedDatesSet.contains(previousDay)) {
+                currentWorkingDay = previousDay
+            } else {
+                return 0
+            }
+        }
+
+        var streak = 0
+
+        while (currentWorkingDay != null) {
+            if (completedDatesSet.contains(currentWorkingDay)) {
+                streak++
+                currentWorkingDay = findPreviousWorkingDay(task, currentWorkingDay)
+            } else {
+                break
+            }
+        }
+
+        return streak
+    }
+
+    @SuppressLint("NewApi")
+    private fun calculateMonthlyStreak(sortedDates: List<LocalDate>): Int {
+        if (sortedDates.isEmpty()) return 0
+
+        val today = LocalDate.now()
+        var streak = 0
+        var expectedYearMonth = today.withDayOfMonth(1)
+
+        for (date in sortedDates) {
+            val dateYearMonth = date.withDayOfMonth(1)
+            when {
+                dateYearMonth == expectedYearMonth -> {
+                    streak++
+                    expectedYearMonth = expectedYearMonth.minusMonths(1)
+                }
+                dateYearMonth.isBefore(expectedYearMonth) -> {
+                    break
+                }
+                else -> {
+                    break
+                }
+            }
+        }
+
+        val lastCompletionDate = sortedDates.first()
+        val monthsSinceLastCompletion = ChronoUnit.MONTHS.between(
+            lastCompletionDate.withDayOfMonth(1),
+            today.withDayOfMonth(1)
+        )
+
+        return if (monthsSinceLastCompletion <= 1) {
+            streak
+        } else {
+            0
+        }
+    }
+
+    @SuppressLint("NewApi")
+    private fun findLastWorkingDay(task: Task, fromDate: LocalDate): LocalDate? {
+        var currentDate = fromDate
+
+        val limitDate = fromDate.minusMonths(6)
+
+        while (!currentDate.isBefore(limitDate)) {
+            if (shouldCompleteOnDate(task, currentDate)) {
+                return currentDate
+            }
+            currentDate = currentDate.minusDays(1)
+        }
+
+        return null
+    }
+
+    @SuppressLint("NewApi")
+    private fun findPreviousWorkingDay(task: Task, fromDate: LocalDate): LocalDate? {
+        var currentDate = fromDate.minusDays(1)
+
+        val limitDate = fromDate.minusMonths(6)
+
+        while (!currentDate.isBefore(limitDate)) {
+            if (shouldCompleteOnDate(task, currentDate)) {
+                return currentDate
+            }
+            currentDate = currentDate.minusDays(1)
+        }
+
+        return null
+    }
+
     @SuppressLint("NewApi")
     fun resetCheckExecForNewDay(task: Task): Task {
         val today = LocalDate.now().format(dateFormatter)
-
         return if (!task.completionDates.contains(today) && task.checkExec) {
             task.copy(checkExec = false)
         } else {
@@ -196,22 +237,8 @@ object StreakManager {
         }
     }
 
-    /**
-     * Получить текущий streak (для отображения)
-     */
     @SuppressLint("NewApi")
     fun getCurrentStreak(task: Task): Int {
-        val today = LocalDate.now()
-        val lastValidDate = getLastValidCompletionDate(task)
-
-        if (lastValidDate == null) return 0
-
-        val daysBetween = ChronoUnit.DAYS.between(lastValidDate, today)
-
-        return if (daysBetween <= 1) {
-            task.streak
-        } else {
-            0
-        }
+        return calculateCurrentStreak(task, task.completionDates)
     }
 }
