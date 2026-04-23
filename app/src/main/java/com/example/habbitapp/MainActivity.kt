@@ -107,7 +107,7 @@ fun MainPage( modifier: Modifier = Modifier,toAddTaskPageClick: ()-> Unit,onTask
                     }
                 )
                 NavigationDrawerItem(
-                    label = { Text("Управление целями и задачами") },
+                    label = { Text("Управление задачами") },
                     icon = { Icon(painter = painterResource(R.drawable.mission_ic), contentDescription = null,modifier= Modifier.size(25.dp)) },
                     selected = false,
                     onClick = { toAimsAndObjectivesPageClick() }

@@ -7,6 +7,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.activity.compose.LocalActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -93,31 +95,26 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun AddTaskPage(toMainPageClick: ()-> Unit) {
     val colors = listOf(
-        // Rose/Red tones
-        Color(0xFFFF8A80),  // Коралловый
-        Color(0xFFF48FB1),  // Розовый
 
-        // Orange/Yellow tones
-        Color(0xFFFFAB91),  // Персиковый
-        Color(0xFFFFE082),  // Янтарный
+        Color(0xFFFF8A80),
+        Color(0xFFF48FB1),
 
-        // Green tones
-        Color(0xFFA5D6A7),  // Мятный
-        Color(0xFF80CBC4),  // Бирюзовый
+        Color(0xFFFFAB91),
+        Color(0xFFFFE082),
 
-        // Blue tones
-        Color(0xFF81D4FA),  // Небесный
-        Color(0xFF9FA8DA),  // Индиго
+        Color(0xFFA5D6A7),
+        Color(0xFF80CBC4),
 
-        // Purple tones
-        Color(0xFFCE93D8),  // Лавандовый
-        Color(0xFFB39DDB),  // Сиреневый
 
-        // Neutral tones
-        Color(0xFFEEEEEE),  // Светлый
-        Color(0xFFBDBDBD),  // Средний
-        Color(0xFF757575),  // Тёмный
-        Color(0xFF424242),  // Очень тёмный
+        Color(0xFF81D4FA),
+        Color(0xFF9FA8DA),
+        Color(0xFFCE93D8),
+        Color(0xFFB39DDB),
+
+        Color(0xFFEEEEEE),
+        Color(0xFFBDBDBD),
+        Color(0xFF757575),
+        Color(0xFF424242),
     )
     var text by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
@@ -142,10 +139,20 @@ fun AddTaskPage(toMainPageClick: ()-> Unit) {
     val scope = rememberCoroutineScope()
 
     var openDialogIcon by remember {mutableStateOf(false)}
-
+    val activity = LocalActivity.current
     var selectedIcon by remember { mutableStateOf("📚") }
 
-    var timeSelected by remember { mutableStateOf("") }
+    val notificationPermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            android.util.Log.d("AddTaskPage", "Notification permission granted")
+        } else {
+            android.util.Log.d("AddTaskPage", "Notification permission denied")
+        }
+    }
+
+
     Column(modifier = Modifier
         .fillMaxSize()
        ) {
@@ -185,6 +192,35 @@ fun AddTaskPage(toMainPageClick: ()-> Unit) {
                     )
                     val habitId = viewModelTask.insertTaskAndGetId(task)
                     if (checkedState.value) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                            val hasPermission = activity?.let {
+                                ActivityCompat.checkSelfPermission(
+                                    it,
+                                    Manifest.permission.POST_NOTIFICATIONS
+                                ) == PackageManager.PERMISSION_GRANTED
+                            } ?: false
+
+                            if (!hasPermission) {
+
+                                notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+
+                                kotlinx.coroutines.delay(500)
+
+
+                                val hasPermissionAfter = activity?.let {
+                                    ActivityCompat.checkSelfPermission(
+                                        it,
+                                        Manifest.permission.POST_NOTIFICATIONS
+                                    ) == PackageManager.PERMISSION_GRANTED
+                                } ?: false
+
+                                if (!hasPermissionAfter) {
+                                    android.util.Log.e("AddTaskPage", "Cannot set reminder: no notification permission")
+                                    toMainPageClick()
+                                    return@launch
+                                }
+                            }
+                        }
                         val reminder = Reminder(
                             id = 0,
                             habitId = habitId.toInt(),
@@ -236,7 +272,7 @@ fun AddTaskPage(toMainPageClick: ()-> Unit) {
                     disabledContainerColor = Color.Transparent,
                     errorContainerColor = Color.Transparent,
                 ),
-                modifier = Modifier.width(200.dp), singleLine = true, maxLines = 1
+                modifier = Modifier.width(200.dp)
             )
 
         }
@@ -445,12 +481,7 @@ fun TimePickerWithDialog(
         }
     }
 }
-@RequiresApi(Build.VERSION_CODES.O)
-fun formattedTime(hour: Int, minute: Int): String {
-    val formatter = DateTimeFormatter.ofPattern("HH:mm")
-    val time = LocalTime.of(hour, minute).format(formatter)
-    return time
-}
+
 @Composable
 fun FullScreenDialog(onDismissRequest: () -> Unit, onIconSelected: (String) -> Unit) {
     val scrollState = rememberScrollState()
