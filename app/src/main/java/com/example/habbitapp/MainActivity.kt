@@ -1,5 +1,6 @@
 package com.example.habbitapp
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -58,6 +59,9 @@ import com.example.habbitapp.ui.page.AimsAndObjectibesPage
 import com.example.habbitapp.ui.theme.HabbitAppTheme
 import com.example.habbitapp.viewmodel.TaskViewModel
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.LocalTime
+import java.util.Calendar
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,6 +80,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@SuppressLint("NewApi")
 @Composable
 fun MainPage( modifier: Modifier = Modifier,toAddTaskPageClick: ()-> Unit,onTaskClick: (Int) -> Unit,
               toAimsAndObjectivesPageClick: ()-> Unit) {
@@ -170,7 +175,8 @@ fun MainPage( modifier: Modifier = Modifier,toAddTaskPageClick: ()-> Unit,onTask
             LazyColumn(modifier = Modifier.fillMaxSize().padding(10.dp)) {
                 when (selectedFilter) {
                     0 -> {
-                        items(tasks.filter { it.repeat == 1 }) { task ->
+                        val today = LocalDate.now().dayOfWeek.value-1
+                        items(tasks.filter { it.days.get(today) ==  true }) { task ->
                             TaskCard(task, onUpdatePage = {
                                 onTaskClick(task.id)
                             })
