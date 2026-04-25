@@ -4,12 +4,19 @@ import android.annotation.SuppressLint
 import android.media.MediaPlayer
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateSizeAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -63,12 +70,12 @@ import kotlin.math.sign
 @Composable
 fun TaskCard(task: Task, onUpdatePage: () -> Unit) {
     val context = LocalContext.current
-    val mediaPlayerSuccess = remember {
-        MediaPlayer.create(context, R.raw.notification)
-    }
-    val mediaPlayerUnSuccess = remember {
-        MediaPlayer.create(context, R.raw.otmena)
-    }
+//    val mediaPlayerSuccess = remember {
+//        MediaPlayer.create(context, R.raw.notification)
+//    }
+//    val mediaPlayerUnSuccess = remember {
+//        MediaPlayer.create(context, R.raw.otmena)
+//    }
     val viewmodel: TaskViewModel = viewModel()
 
     val color by animateColorAsState(
@@ -107,17 +114,37 @@ fun TaskCard(task: Task, onUpdatePage: () -> Unit) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(task.icon, modifier = Modifier.padding(10.dp))
             Column {
-                Text(task.name)
-                Text("\uD83D\uDD25 ${task.streak} Days", fontSize = 10.sp)
+
+                    Text(task.name)
+                Row {
+                    Text("\uD83D\uDD25", fontSize = 10.sp)
+                    AnimatedContent(
+                        targetState = task.streak,
+                        transitionSpec = {
+                            if (targetState > initialState) {
+                                slideInVertically { height -> height } + fadeIn() togetherWith
+                                        slideOutVertically { height -> -height } + fadeOut()
+                            } else {
+                                slideInVertically { height -> -height } + fadeIn() togetherWith
+                                        slideOutVertically { height -> height } + fadeOut()
+                            }.using(
+                                SizeTransform(clip = false)
+                            )
+                        }
+                    ) { targetCount ->
+                        Text(text = "$targetCount", fontSize = 10.sp)
+                    }
+                    Text("Days", fontSize = 10.sp)
+                }
             }
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                 IconButton(onClick = {
                     val updatedTask = if (!task.checkExec) {
-                        mediaPlayerSuccess.start()
+//                        mediaPlayerSuccess.start()
                         StreakManager.onTaskCompleted(task)
 
                     } else {
-                        mediaPlayerUnSuccess.start()
+//                        mediaPlayerUnSuccess.start()
                         StreakManager.onTaskUncompleted(task)
                     }
                     viewmodel.updateTask(updatedTask)

@@ -357,21 +357,18 @@ fun FilterChipDays(
 @Composable
 fun TimePickerWithDialog(
     onTimeSelected: (hour: Int, minute: Int) -> Unit,
-    initialHour: Int = 8,    // Начальный час (из базы данных)
-    initialMinute: Int = 0,  // Начальная минута (из базы данных)
+    initialHour: Int = 8,
+    initialMinute: Int = 0,
     modifier: Modifier = Modifier,
 ) {
-    // Используем initialHour и initialMinute для начального состояния
     var selectedHour by remember { mutableIntStateOf(initialHour) }
     var selectedMinute by remember { mutableIntStateOf(initialMinute) }
     var showDialog by remember { mutableStateOf(false) }
 
-    // Форматируем время для отображения (всегда показываем сохранённое время)
     val formattedTime = remember(selectedHour, selectedMinute) {
         String.format("%02d:%02d", selectedHour, selectedMinute)
     }
 
-    // Обновляем время, если initialHour/initialMinute изменились извне
     LaunchedEffect(initialHour, initialMinute) {
         selectedHour = initialHour
         selectedMinute = initialMinute
@@ -381,7 +378,6 @@ fun TimePickerWithDialog(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Кнопка с отображением текущего времени (ВСЕГДА показывает время)
         Box(
             modifier = Modifier
                 .clickable { showDialog = true }
@@ -397,7 +393,7 @@ fun TimePickerWithDialog(
             ) {
 
                 Text(
-                    text = formattedTime,  // ВСЕГДА показывает время (никогда "Select time")
+                    text = formattedTime,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Medium,
                     color = Color.White
@@ -405,7 +401,7 @@ fun TimePickerWithDialog(
             }
         }
 
-        // Диалог выбора времени
+
         if (showDialog) {
             val timeState = rememberTimePickerState(
                 is24Hour = true,
@@ -428,7 +424,7 @@ fun TimePickerWithDialog(
                         modifier = Modifier.padding(20.dp)
                     ) {
                         Text(
-                            text = "⏰ Выберите время",
+                            text = "Выберите время",
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color.White,
@@ -500,7 +496,7 @@ fun FullScreenDialog(onDismissRequest: () -> Unit, onIconSelected: (String) -> U
                     .fillMaxSize()
                     .padding(20.dp)
             ) {
-                // Заголовок с эмодзи
+
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.padding(bottom = 16.dp)
@@ -517,7 +513,7 @@ fun FullScreenDialog(onDismissRequest: () -> Unit, onIconSelected: (String) -> U
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                // Категория: Спорт и активность 🏃
+
                 CategoryHeader(emoji = "🏃‍♂️", title = "Sports & Activity")
                 LazyRow(
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -531,7 +527,6 @@ fun FullScreenDialog(onDismissRequest: () -> Unit, onIconSelected: (String) -> U
                     }
                 }
 
-                // Категория: Еда и здоровье 🥗
                 CategoryHeader(emoji = "🥗", title = "Food & Health")
                 LazyRow(
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -545,7 +540,6 @@ fun FullScreenDialog(onDismissRequest: () -> Unit, onIconSelected: (String) -> U
                     }
                 }
 
-                // Категория: Работа и учеба 📚
                 CategoryHeader(emoji = "📚", title = "Work & Study")
                 LazyRow(
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -559,7 +553,6 @@ fun FullScreenDialog(onDismissRequest: () -> Unit, onIconSelected: (String) -> U
                     }
                 }
 
-                // Категория: Дом и саморазвитие 🏠
                 CategoryHeader(emoji = "🏠", title = "Home & Self Care")
                 LazyRow(
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -573,7 +566,6 @@ fun FullScreenDialog(onDismissRequest: () -> Unit, onIconSelected: (String) -> U
                     }
                 }
 
-                // Категория: Финансы и цели 💰
                 CategoryHeader(emoji = "💰", title = "Finance & Goals")
                 LazyRow(
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -586,7 +578,6 @@ fun FullScreenDialog(onDismissRequest: () -> Unit, onIconSelected: (String) -> U
                         IconCircle(emoji = emoji, onClick = { onIconSelected(emoji) })
                     }
                 }
-                // Категория: Путешествия ✈️
                 CategoryHeader(emoji = "✈️", title = "Travel & Adventure")
                 LazyRow(horizontalArrangement = Arrangement.spacedBy(16.dp),
                     modifier = Modifier.padding(vertical = 12.dp)) {
@@ -598,7 +589,6 @@ fun FullScreenDialog(onDismissRequest: () -> Unit, onIconSelected: (String) -> U
                 }
             }
 
-// Категория: Творчество 🎨
                 CategoryHeader(emoji = "🎨", title = "Creativity")
                 LazyRow(horizontalArrangement = Arrangement.spacedBy(16.dp),
                     modifier = Modifier.padding(vertical = 12.dp)) {
@@ -610,7 +600,6 @@ fun FullScreenDialog(onDismissRequest: () -> Unit, onIconSelected: (String) -> U
                 }
             }
 
-// Категория: Технологии 📱
                 CategoryHeader(emoji = "📱", title = "Technology")
                 LazyRow(horizontalArrangement = Arrangement.spacedBy(16.dp),
                     modifier = Modifier.padding(vertical = 12.dp)) {
@@ -622,7 +611,6 @@ fun FullScreenDialog(onDismissRequest: () -> Unit, onIconSelected: (String) -> U
                 }
             }
 
-                // Категория: Настроение и эмоции 😊
                 CategoryHeader(emoji = "😊", title = "Mood & Emotions")
                 LazyRow(
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -638,7 +626,6 @@ fun FullScreenDialog(onDismissRequest: () -> Unit, onIconSelected: (String) -> U
 
                 Spacer(modifier = Modifier.height(20.dp))
 
-                // Кнопка закрытия
                 Button(
                     onClick = onDismissRequest,
                     modifier = Modifier.fillMaxWidth(),
@@ -648,7 +635,7 @@ fun FullScreenDialog(onDismissRequest: () -> Unit, onIconSelected: (String) -> U
                     ),
                     shape = RoundedCornerShape(12.dp)
                 ) {
-                    Text("✖ Close", fontSize = 16.sp)
+                    Text("Close", fontSize = 16.sp)
                 }
             }
         }
@@ -676,7 +663,7 @@ fun CategoryHeader(emoji: String, title: String) {
 fun IconCircle(emoji: String, onClick: () -> Unit) {
     Box(
         modifier = Modifier
-            .size(56.dp) // Увеличенный размер для эмодзи
+            .size(56.dp)
             .clip(CircleShape)
             .background(
                 Color.White
@@ -686,7 +673,7 @@ fun IconCircle(emoji: String, onClick: () -> Unit) {
     ) {
         Text(
             text = emoji,
-            fontSize = 28.sp, // Крупные эмодзи
+            fontSize = 28.sp,
             modifier = Modifier.padding(8.dp)
         )
     }
