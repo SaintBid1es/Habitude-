@@ -41,6 +41,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.habbitapp.R
 import com.example.habbitapp.model.entity.Aims
 import com.example.habbitapp.viewmodel.AimViewModel
+import java.time.LocalDate
 
 
 @SuppressLint("NewApi")
@@ -177,7 +178,8 @@ fun AimCard(aims: Aims, onUpdatePage: () -> Unit) {
 @Preview
 fun AimCardPreview(){
     val map:Map<String, Boolean> =mapOf("Купить продукты" to true,"Порезать овощи" to false,"В кастрюлю все закинть" to false)
-    val aim = Aims(0,"Приготовить ужин",false,"Дом",1,false,map)
+    val date = LocalDate.now().toString()
+    val aim = Aims(0,"Приготовить ужин",false,"Дом",1,false,map,date)
 
     AimCard(aim,{})
 }

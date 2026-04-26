@@ -42,6 +42,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.habbitapp.FilterChip
 import com.example.habbitapp.R
 import com.example.habbitapp.view.ui.card.TaskCard
+import com.example.habbitapp.viewmodel.AimViewModel
 import com.example.habbitapp.viewmodel.TaskViewModel
 import kotlinx.coroutines.launch
 
@@ -49,8 +50,8 @@ import kotlinx.coroutines.launch
 fun AimsAndObjectibesPage( modifier: Modifier = Modifier,toMainPageClick: ()-> Unit,toAddAimsPageClick: ()-> Unit,onAimsClick: (Int) -> Unit,
                            ) {
     var selectedFilter by remember { mutableIntStateOf(0) }
-    val viewModel: TaskViewModel = viewModel()
-    val tasks  by viewModel.task.collectAsStateWithLifecycle()
+    val viewModel: AimViewModel = viewModel()
+    val tasks by viewModel.aim.collectAsStateWithLifecycle()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     ModalNavigationDrawer(
@@ -61,19 +62,32 @@ fun AimsAndObjectibesPage( modifier: Modifier = Modifier,toMainPageClick: ()-> U
                 HorizontalDivider()
                 NavigationDrawerItem(
                     label = { Text("Управление привычками") },
-                    icon = { Icon(painter = painterResource(R.drawable.habit_ic), contentDescription = null,modifier= Modifier.size(25.dp)) },
+                    icon = {
+                        Icon(
+                            painter = painterResource(R.drawable.habit_ic),
+                            contentDescription = null,
+                            modifier = Modifier.size(25.dp)
+                        )
+                    },
                     selected = false,
-                    onClick = { toMainPageClick()}
+                    onClick = { toMainPageClick() }
                 )
                 NavigationDrawerItem(
                     label = { Text("Управление целями и задачами") },
-                    icon = { Icon(painter = painterResource(R.drawable.mission_ic), contentDescription = null,modifier= Modifier.size(25.dp)) },
+                    icon = {
+                        Icon(
+                            painter = painterResource(R.drawable.mission_ic),
+                            contentDescription = null,
+                            modifier = Modifier.size(25.dp)
+                        )
+                    },
                     selected = false,
-                    onClick = { scope.launch {
-                        drawerState.apply {
-                            if (isClosed) open() else close()
+                    onClick = {
+                        scope.launch {
+                            drawerState.apply {
+                                if (isClosed) open() else close()
+                            }
                         }
-                    }
                     }
                 )
 
@@ -89,7 +103,8 @@ fun AimsAndObjectibesPage( modifier: Modifier = Modifier,toMainPageClick: ()-> U
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 IconButton(onClick = {
-                    scope.launch {drawerState.open()} }) {
+                    scope.launch { drawerState.open() }
+                }) {
                     Icon(Icons.Filled.Menu, "Меню")
                 }
                 Row(
@@ -137,54 +152,55 @@ fun AimsAndObjectibesPage( modifier: Modifier = Modifier,toMainPageClick: ()-> U
 
 
             LazyColumn(modifier = Modifier.fillMaxSize().padding(10.dp)) {
-                when (selectedFilter) {
-                    0 -> {
-                        items(tasks.filter { it.repeat == 1 }) { task ->
-                            TaskCard(task, onUpdatePage = {
-                                onAimsClick(task.id)
-                            })
+//                when (selectedFilter) {
+//                    0 -> {
+//                        items(tasks.filter { it.repeat == 1 }) { task ->
+//                            TaskCard(task, onUpdatePage = {
+//                                onAimsClick(task.id)
+//                            })
+//
+//                        }
+//                    }
+//
+//                    1 -> {
+//                        items(tasks.filter { it.repeat == 2 }) { task ->
+//                            TaskCard(task, onUpdatePage = {
+//                                onAimsClick(task.id)
+//                            })
+//
+//                        }
+//                    }
+//
+//                    2 -> {
+//                        items(tasks.filter { it.repeat == 3 }) { task ->
+//                            TaskCard(task, onUpdatePage = {
+//                                onAimsClick(task.id)
+//                            })
+//
+//                        }
+//                    }
+//
+//                    3 -> {
+//                        items(tasks) { task ->
+//                            TaskCard(task, onUpdatePage = {
+//                                onAimsClick(task.id)
+//                            })
+//
+//                        }
+//                    }
+//                }
+//            }
 
-                        }
-                    }
-
-                    1 -> {
-                        items(tasks.filter { it.repeat == 2 }) { task ->
-                            TaskCard(task, onUpdatePage = {
-                                onAimsClick(task.id)
-                            })
-
-                        }
-                    }
-
-                    2 -> {
-                        items(tasks.filter { it.repeat == 3 }) { task ->
-                            TaskCard(task, onUpdatePage = {
-                                onAimsClick(task.id)
-                            })
-
-                        }
-                    }
-
-                    3 -> {
-                        items(tasks) { task ->
-                            TaskCard(task, onUpdatePage = {
-                                onAimsClick(task.id)
-                            })
-
-                        }
-                    }
-                }
             }
-
-        }
-        Box(
-            contentAlignment = Alignment.BottomEnd,
-            modifier = Modifier.fillMaxSize().padding(30.dp)
-        ) {
-            FloatingActionButton(
-                onClick = toAddAimsPageClick,
+            Box(
+                contentAlignment = Alignment.BottomEnd,
+                modifier = Modifier.fillMaxSize().padding(30.dp)
             ) {
-                Icon(Icons.Filled.Add, contentDescription = "Добавить")
+                FloatingActionButton(
+                    onClick = toAddAimsPageClick,
+                ) {
+                    Icon(Icons.Filled.Add, contentDescription = "Добавить")
+                }
             }
         }
     }
