@@ -21,6 +21,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
@@ -102,6 +103,18 @@ fun MainPage( modifier: Modifier = Modifier,toAddTaskPageClick: ()-> Unit,onTask
                 NavigationDrawerItem(
                     label = { Text("Управление задачами") },
                     icon = { Icon(painter = painterResource(R.drawable.mission_ic), contentDescription = null,modifier= Modifier.size(25.dp)) },
+                    selected = false,
+                    onClick = { toAimsAndObjectivesPageClick() }
+                )
+                NavigationDrawerItem(
+                    label = { Text("Уровень продуктивности") },
+                    icon = { Icon(painter = painterResource(R.drawable.graphic_ic), contentDescription = null,modifier= Modifier.size(25.dp)) },
+                    selected = false,
+                    onClick = { toAimsAndObjectivesPageClick() }
+                )
+                NavigationDrawerItem(
+                    label = { Text("Настройки") },
+                    icon = { Icon(Icons.Default.Settings, contentDescription = null,modifier= Modifier.size(25.dp)) },
                     selected = false,
                     onClick = { toAimsAndObjectivesPageClick() }
                 )

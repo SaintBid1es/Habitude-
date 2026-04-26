@@ -97,7 +97,7 @@ fun TaskCard(task: Task, onUpdatePage: () -> Unit) {
 
                     Text(task.name)
                 Row {
-                    Text("\uD83D\uDD25", fontSize = 10.sp)
+                    Text("\uD83D\uDD25 ", fontSize = 10.sp)
                     AnimatedContent(
                         targetState = task.streak,
                         transitionSpec = {
@@ -114,7 +114,7 @@ fun TaskCard(task: Task, onUpdatePage: () -> Unit) {
                     ) { targetCount ->
                         Text(text = "$targetCount", fontSize = 10.sp)
                     }
-                    Text("Days", fontSize = 10.sp)
+                    Text(" Days", fontSize = 10.sp)
                 }
             }
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {

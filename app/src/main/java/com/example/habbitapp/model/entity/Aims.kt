@@ -11,8 +11,9 @@ data class Aims(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val name: String,
-    val icon:String,
-    val description: String,
     val checkExec: Boolean = false,
-    val category :Int
+    val category : String,
+    val priority:Int,
+    val autotransfer:Boolean,
+    val subAims: Map<String,Boolean>
     )

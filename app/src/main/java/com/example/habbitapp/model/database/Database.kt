@@ -11,7 +11,7 @@ import com.example.habbitapp.model.entity.Aims
 import com.example.habbitapp.model.entity.Reminder
 import com.example.habbitapp.model.entity.Task
 
-@Database(entities = [Task::class, Reminder::class, Aims::class], version = 8, exportSchema = false)
+@Database(entities = [Task::class, Reminder::class, Aims::class], version = 9, exportSchema = false)
 abstract class ItemDatabase : RoomDatabase() {
     abstract fun taskDao(): TaskDao
     abstract fun aimsDao(): AimsDao

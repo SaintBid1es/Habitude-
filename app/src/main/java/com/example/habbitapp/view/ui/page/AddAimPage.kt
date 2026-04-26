@@ -65,15 +65,15 @@ fun AddAimPage(toAimsPageClick: ()-> Unit) {
             Text("Save", modifier = Modifier.clickable{
                 scope.launch {
 
-                    val aim = Aims(
-                        0,
-                        text,
-                        selectedIcon,
-                        description,
-                        false,
-                        selectedCategory
-                    )
-                    viewModelAim.insertAim(aim)
+//                    val aim = Aims(
+//                        0,
+//                        text,
+//                        selectedIcon,
+//                        description,
+//                        false,
+//                        selectedCategory
+//                    )
+//                    viewModelAim.insertAim(aim)
 
                     toAimsPageClick()
                 }

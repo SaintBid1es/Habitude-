@@ -31,6 +31,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.habbitapp.R
 import com.example.habbitapp.model.entity.Aims
@@ -41,12 +42,12 @@ import com.example.habbitapp.viewmodel.AimViewModel
 @Composable
 fun AimCard(aims: Aims, onUpdatePage: () -> Unit) {
     val context = LocalContext.current
-    val mediaPlayerSuccess = remember {
-        MediaPlayer.create(context, R.raw.notification)
-    }
-    val mediaPlayerUnSuccess = remember {
-        MediaPlayer.create(context, R.raw.otmena)
-    }
+//    val mediaPlayerSuccess = remember {
+//        MediaPlayer.create(context, R.raw.notification)
+//    }
+//    val mediaPlayerUnSuccess = remember {
+//        MediaPlayer.create(context, R.raw.otmena)
+//    }
     val viewmodel: AimViewModel = viewModel()
 
 
@@ -78,18 +79,24 @@ fun AimCard(aims: Aims, onUpdatePage: () -> Unit) {
     ) {
 
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(aims.icon, modifier = Modifier.padding(10.dp))
-            Column {
+
+            Column(modifier = Modifier.padding(5.dp)) {
                 Text(aims.name)
+                Row {
+                    Text("${aims.subAims.filter{ it.value== true }.size}/${aims.subAims.size} > ", fontSize = 12.sp, color = Color.Gray)
+                    Text(" ${aims.category}")
+
+                }
+
             }
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                 IconButton(onClick = {
                      if (!aims.checkExec) {
-                        mediaPlayerSuccess.start()
+//                        mediaPlayerSuccess.start()
                    val newAim =     aims.copy(checkExec = true)
                          viewmodel.updateAim(newAim)
                      } else {
-                        mediaPlayerUnSuccess.start()
+//                        mediaPlayerUnSuccess.start()
                          val newAim = aims.copy(checkExec = false)
                          viewmodel.updateAim(newAim)
                     }
@@ -112,7 +119,9 @@ fun AimCard(aims: Aims, onUpdatePage: () -> Unit) {
 @Composable
 @Preview
 fun AimCardPreview(){
-    val aim = Aims(0,"","","",false,1)
+    val map:Map<String, Boolean> =mapOf("Купить продукты" to true,"Порезать овощи" to true,"В кастрюлю все закинть" to false)
+    val aim = Aims(0,"Приготовить ужин",false,"Дом",1,false,map)
+
     AimCard(aim,{})
 }
 

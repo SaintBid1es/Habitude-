@@ -36,4 +36,27 @@ class Converters {
             daysString.split(",").map { it.toInt() }
         }
     }
+    @TypeConverter
+    fun fromMapStringBoolean(map: Map<String, Boolean>): String {
+        if (map.isEmpty()) return ""
+        return map.entries.joinToString(separator = ";") { entry ->
+            "${entry.key}:${if (entry.value) "1" else "0"}"
+        }
+    }
+
+    @TypeConverter
+    fun toMapStringBoolean(data: String): Map<String, Boolean> {
+        if (data.isEmpty()) return emptyMap()
+
+        return data.split(";")
+            .mapNotNull { pair ->
+                val parts = pair.split(":")
+                if (parts.size == 2) {
+                    val key = parts[0]
+                    val value = parts[1] == "1"
+                    key to value
+                } else null
+            }
+            .toMap()
+    }
 }

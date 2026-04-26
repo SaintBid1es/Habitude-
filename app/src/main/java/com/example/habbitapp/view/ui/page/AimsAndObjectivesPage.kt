@@ -97,7 +97,7 @@ fun AimsAndObjectibesPage( modifier: Modifier = Modifier,toMainPageClick: ()-> U
                     horizontalArrangement = Arrangement.Center
                 ) {
 
-                    Text("Цели", fontWeight = FontWeight.Bold, fontSize = 20.sp)
+//                    Text("Цели", fontWeight = FontWeight.Bold, fontSize = 20.sp)
                     Text(
                         "Задачи",
                         fontWeight = FontWeight.Bold,

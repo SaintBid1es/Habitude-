@@ -21,9 +21,9 @@ import com.example.habbitapp.model.database.Converters
 data class Reminder(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-    val habitId: Int,  // внешний ключ к Habit
-    val hour: Int,     // 0-23
-    val minute: Int,   // 0-59
+    val habitId: Int,
+    val hour: Int,
+    val minute: Int,
     val isEnabled: Boolean = true,
-    val daysOfWeek: List<Boolean>? = null  // если нужно разное время в разные дни
+    val daysOfWeek: List<Boolean>? = null
 )
