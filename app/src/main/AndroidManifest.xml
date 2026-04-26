@@ -20,7 +20,7 @@
         android:theme="@style/Theme.HabbitApp">
 
         <receiver
-            android:name=".AlarmReceiver"
+            android:name=".model.utils.AlarmReceiver"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

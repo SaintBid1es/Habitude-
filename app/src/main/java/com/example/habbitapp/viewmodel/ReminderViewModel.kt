@@ -2,20 +2,13 @@ package com.example.habbitapp.viewmodel
 
 import android.Manifest
 import android.app.Activity
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.content.Context
 import android.os.Build
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.habbitapp.ItemDatabase
+import com.example.habbitapp.model.database.ItemDatabase
 import com.example.habbitapp.MyApplication
-import com.example.habbitapp.dao.TaskDao
-import com.example.habbitapp.entity.Reminder
-import com.example.habbitapp.entity.Task
+import com.example.habbitapp.model.entity.Reminder
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest

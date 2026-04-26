@@ -1,12 +1,5 @@
-package com.example.habbitapp
+package com.example.habbitapp.view.ui.page
 
-import android.annotation.SuppressLint
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Menu
@@ -29,7 +21,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
@@ -48,35 +39,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.compose.rememberNavController
-import com.example.habbitapp.view.navigation.AppNavHost
+import com.example.habbitapp.FilterChip
+import com.example.habbitapp.R
 import com.example.habbitapp.view.ui.card.TaskCard
-import com.example.habbitapp.view.ui.theme.HabbitAppTheme
 import com.example.habbitapp.viewmodel.TaskViewModel
 import kotlinx.coroutines.launch
-import java.time.LocalDate
 
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            HabbitAppTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Box(modifier = Modifier.padding(innerPadding)) {
-                        val navController = rememberNavController()
-                        AppNavHost(navController)
-                    }
-                }
-            }
-        }
-    }
-}
-
-@SuppressLint("NewApi")
 @Composable
-fun MainPage( modifier: Modifier = Modifier,toAddTaskPageClick: ()-> Unit,onTaskClick: (Int) -> Unit,
-              toAimsAndObjectivesPageClick: ()-> Unit) {
+fun AimsAndObjectibesPage( modifier: Modifier = Modifier,toMainPageClick: ()-> Unit,toAddAimsPageClick: ()-> Unit,onAimsClick: (Int) -> Unit,
+                           ) {
     var selectedFilter by remember { mutableIntStateOf(0) }
     val viewModel: TaskViewModel = viewModel()
     val tasks  by viewModel.task.collectAsStateWithLifecycle()
@@ -92,18 +63,18 @@ fun MainPage( modifier: Modifier = Modifier,toAddTaskPageClick: ()-> Unit,onTask
                     label = { Text("Управление привычками") },
                     icon = { Icon(painter = painterResource(R.drawable.habit_ic), contentDescription = null,modifier= Modifier.size(25.dp)) },
                     selected = false,
+                    onClick = { toMainPageClick()}
+                )
+                NavigationDrawerItem(
+                    label = { Text("Управление целями и задачами") },
+                    icon = { Icon(painter = painterResource(R.drawable.mission_ic), contentDescription = null,modifier= Modifier.size(25.dp)) },
+                    selected = false,
                     onClick = { scope.launch {
                         drawerState.apply {
                             if (isClosed) open() else close()
                         }
                     }
                     }
-                )
-                NavigationDrawerItem(
-                    label = { Text("Управление задачами") },
-                    icon = { Icon(painter = painterResource(R.drawable.mission_ic), contentDescription = null,modifier= Modifier.size(25.dp)) },
-                    selected = false,
-                    onClick = { toAimsAndObjectivesPageClick() }
                 )
 
             }
@@ -126,9 +97,9 @@ fun MainPage( modifier: Modifier = Modifier,toAddTaskPageClick: ()-> Unit,onTask
                     horizontalArrangement = Arrangement.Center
                 ) {
 
-                    Text("Habit", fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                    Text("Цели", fontWeight = FontWeight.Bold, fontSize = 20.sp)
                     Text(
-                        "App",
+                        "Задачи",
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp,
                         modifier = Modifier.padding(start = 10.dp),
@@ -156,7 +127,7 @@ fun MainPage( modifier: Modifier = Modifier,toAddTaskPageClick: ()-> Unit,onTask
                     onClick = { selectedFilter = 2 }
                 )
                 FilterChip(
-                    text = "Overall",
+                    text = "Goals for life",
                     isSelected = selectedFilter == 3,
                     onClick = { selectedFilter = 3 }
                 )
@@ -168,10 +139,9 @@ fun MainPage( modifier: Modifier = Modifier,toAddTaskPageClick: ()-> Unit,onTask
             LazyColumn(modifier = Modifier.fillMaxSize().padding(10.dp)) {
                 when (selectedFilter) {
                     0 -> {
-                        val today = LocalDate.now().dayOfWeek.value-1
-                        items(tasks.filter { it.days.get(today) ==  true }) { task ->
+                        items(tasks.filter { it.repeat == 1 }) { task ->
                             TaskCard(task, onUpdatePage = {
-                                onTaskClick(task.id)
+                                onAimsClick(task.id)
                             })
 
                         }
@@ -180,7 +150,7 @@ fun MainPage( modifier: Modifier = Modifier,toAddTaskPageClick: ()-> Unit,onTask
                     1 -> {
                         items(tasks.filter { it.repeat == 2 }) { task ->
                             TaskCard(task, onUpdatePage = {
-                                onTaskClick(task.id)
+                                onAimsClick(task.id)
                             })
 
                         }
@@ -189,7 +159,7 @@ fun MainPage( modifier: Modifier = Modifier,toAddTaskPageClick: ()-> Unit,onTask
                     2 -> {
                         items(tasks.filter { it.repeat == 3 }) { task ->
                             TaskCard(task, onUpdatePage = {
-                                onTaskClick(task.id)
+                                onAimsClick(task.id)
                             })
 
                         }
@@ -198,7 +168,7 @@ fun MainPage( modifier: Modifier = Modifier,toAddTaskPageClick: ()-> Unit,onTask
                     3 -> {
                         items(tasks) { task ->
                             TaskCard(task, onUpdatePage = {
-                                onTaskClick(task.id)
+                                onAimsClick(task.id)
                             })
 
                         }
@@ -212,7 +182,7 @@ fun MainPage( modifier: Modifier = Modifier,toAddTaskPageClick: ()-> Unit,onTask
             modifier = Modifier.fillMaxSize().padding(30.dp)
         ) {
             FloatingActionButton(
-                onClick = toAddTaskPageClick,
+                onClick = toAddAimsPageClick,
             ) {
                 Icon(Icons.Filled.Add, contentDescription = "Добавить")
             }
@@ -220,32 +190,14 @@ fun MainPage( modifier: Modifier = Modifier,toAddTaskPageClick: ()-> Unit,onTask
     }
 }
 
-@Preview()
+
+@Preview
 @Composable
-fun MainPagePreview() {
-    HabbitAppTheme {
-        MainPage(
-             toAddTaskPageClick = {}, onTaskClick = {}, toAimsAndObjectivesPageClick = {}
-        )
-    }
-}
-@Composable
-fun FilterChip(
-    text: String,
-    isSelected: Boolean,
-    onClick: () -> Unit
-) {
-    Text(
-        text = text,
-        fontWeight = FontWeight.Bold,
-        fontSize = 16.sp,
-        modifier = Modifier
-            .clickable { onClick() }
-            .background(
-                color = if (isSelected) Color.Green.copy(alpha = 0.2f) else Color.Transparent,
-                shape = RoundedCornerShape(8.dp)
-            )
-            .padding(horizontal = 12.dp, vertical = 6.dp),
-        color = if (isSelected) Color.Green else Color.Unspecified
-    )
+fun AimsAndObjectibesPagePreview(){
+AimsAndObjectibesPage(
+
+    toMainPageClick = {},
+    toAddAimsPageClick = {},
+    onAimsClick = {}
+)
 }

@@ -2,11 +2,9 @@ package com.example.habbitapp.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.habbitapp.ItemDatabase
+import com.example.habbitapp.model.database.ItemDatabase
 import com.example.habbitapp.MyApplication
-import com.example.habbitapp.dao.TaskDao
-import com.example.habbitapp.entity.Reminder
-import com.example.habbitapp.entity.Task
+import com.example.habbitapp.model.entity.Task
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
