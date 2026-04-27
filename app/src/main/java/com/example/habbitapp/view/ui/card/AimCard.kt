@@ -2,6 +2,8 @@ package com.example.habbitapp.view.ui.card
 
 import android.annotation.SuppressLint
 import android.media.MediaPlayer
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateSizeAsState
@@ -174,6 +176,7 @@ fun AimCard(aims: Aims, onUpdatePage: () -> Unit) {
 
 }
 
+@SuppressLint("NewApi")
 @Composable
 @Preview
 fun AimCardPreview(){

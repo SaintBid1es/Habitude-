@@ -19,7 +19,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-            // Добавьте это для настройки Room через kapt вместо ksp
+
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments += mapOf("room.schemaLocation" to "$projectDir/schemas")
@@ -48,7 +48,6 @@ android {
     }
 }
 
-// Удалите блок room { ... } - он не нужен с такой конфигурацией
 
 dependencies {
     // Переключение между страницами
@@ -60,6 +59,9 @@ dependencies {
     // KSP
     ksp("androidx.room:room-compiler:2.6.1")
 
+    // row calendar
+    implementation("io.github.chouaibmo:rowkalendar:0.0.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.0.3")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
