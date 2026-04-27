@@ -29,6 +29,7 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -44,6 +45,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.habbitapp.FilterChip
 import com.example.habbitapp.R
+import com.example.habbitapp.view.ui.card.AimCard
 import com.example.habbitapp.view.ui.card.TaskCard
 import com.example.habbitapp.view.ui.theme.GrayLight
 import com.example.habbitapp.view.ui.theme.GrayText
@@ -56,11 +58,12 @@ import kotlinx.coroutines.launch
 import io.github.chouaibmo.rowkalendar.RowKalendar
 import io.github.chouaibmo.rowkalendar.components.DateCell
 import io.github.chouaibmo.rowkalendar.components.DateCellDefaults
+import kotlinx.datetime.LocalDate
 
 @Composable
 fun AimsAndObjectibesPage( modifier: Modifier = Modifier,toMainPageClick: ()-> Unit,toAddAimsPageClick: ()-> Unit,onAimsClick: (Int) -> Unit,
                            ) {
-    var selectedFilter by remember { mutableIntStateOf(0) }
+    var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
     val viewModel: AimViewModel = viewModel()
     val tasks by viewModel.aim.collectAsStateWithLifecycle()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -133,86 +136,72 @@ fun AimsAndObjectibesPage( modifier: Modifier = Modifier,toMainPageClick: ()-> U
                     )
                 }
             }
-//            Row(
-//                modifier = Modifier.fillMaxWidth(),
-//                horizontalArrangement = Arrangement.SpaceAround
-//            ) {
-//                FilterChip(
-//                    text = "Today",
-//                    isSelected = selectedFilter == 0,
-//                    onClick = { selectedFilter = 0 }
-//                )
-//                FilterChip(
-//                    text = "Weekly",
-//                    isSelected = selectedFilter == 1,
-//                    onClick = { selectedFilter = 1 }
-//                )
-//                FilterChip(
-//                    text = "Monthly",
-//                    isSelected = selectedFilter == 2,
-//                    onClick = { selectedFilter = 2 }
-//                )
-//                FilterChip(
-//                    text = "Goals for life",
-//                    isSelected = selectedFilter == 3,
-//                    onClick = { selectedFilter = 3 }
-//                )
-//            }
-            RowKalendarSample()
+
+            RowKalendar(
+                modifier = Modifier.fillMaxWidth(),
+                content = { date, isSelected, onClick ->
+                    DateCell(
+                        date = date,
+                        isSelected = isSelected,
+                        shape = RoundedCornerShape(12.dp),
+                        elevation = DateCellDefaults.DateCellElevation(
+                            selectedElevation = 4.dp,
+                            pastElevation = 2.dp,
+                            futureElevation = 2.dp
+                        ),
+                        border = DateCellDefaults.border(
+                            selectedBorderColor = Color.LightGray,
+                            pastBorderColor = Color.LightGray,
+                            futureBorderColor = Color.LightGray,
+                            selectedBorderWidth = 1.dp,
+                            pastBorderWidth = 1.dp,
+                            futureBorderWidth = 1.dp
+                        ),
+                        colors = DateCellDefaults.colors(
+                            selectedContainerColor = GreenPrimary,
+                            selectedTextColor = White,
+
+                            pastContainerColor = GrayLight,
+                            pastTextColor = GrayText,
+
+                            futureContainerColor = GreenLight,
+                            futureTextColor = White
+                        ),
+                        modifier = Modifier,
+                        onDateSelected = { clickedDate->
+                            onClick(clickedDate)
+                            selectedDate = clickedDate
+                        },
+                    )
+                }
+            )
 
 
 
 
             LazyColumn(modifier = Modifier.fillMaxSize().padding(10.dp)) {
-//                when (selectedFilter) {
-//                    0 -> {
-//                        items(tasks.filter { it.repeat == 1 }) { task ->
-//                            TaskCard(task, onUpdatePage = {
-//                                onAimsClick(task.id)
-//                            })
-//
-//                        }
-//                    }
-//
-//                    1 -> {
-//                        items(tasks.filter { it.repeat == 2 }) { task ->
-//                            TaskCard(task, onUpdatePage = {
-//                                onAimsClick(task.id)
-//                            })
-//
-//                        }
-//                    }
-//
-//                    2 -> {
-//                        items(tasks.filter { it.repeat == 3 }) { task ->
-//                            TaskCard(task, onUpdatePage = {
-//                                onAimsClick(task.id)
-//                            })
-//
-//                        }
-//                    }
-//
-//                    3 -> {
-//                        items(tasks) { task ->
-//                            TaskCard(task, onUpdatePage = {
-//                                onAimsClick(task.id)
-//                            })
-//
-//                        }
-//                    }
-//                }
-//            }
 
-            }
-            Box(
-                contentAlignment = Alignment.BottomEnd,
-                modifier = Modifier.fillMaxSize().padding(30.dp)
+                        items(tasks.filter { it.date == selectedDate.toString() }) { task ->
+                            AimCard (task, onUpdatePage = {
+                                onAimsClick(task.id)
+                            })
+
+                        }
+                    }
+
+
+
+
+        }
+        Box(
+            contentAlignment = Alignment.BottomEnd,
+            modifier = Modifier.fillMaxSize().padding(30.dp)
+        ) {
+            FloatingActionButton(
+                onClick = toAddAimsPageClick,
+                containerColor = GreenPrimary
             ) {
-                FloatingActionButton(
-                    onClick = toAddAimsPageClick,
-                ) {
-                    Icon(Icons.Filled.Add, contentDescription = "Добавить")
-                }
+                Icon(Icons.Filled.Add, contentDescription = "Добавить")
             }
         }
     }
@@ -230,46 +219,6 @@ AimsAndObjectibesPage(
 )
 }
 
-
-
-@Composable
-fun RowKalendarSample() {
-    RowKalendar(
-        modifier = Modifier.fillMaxWidth(),
-        content = { date, isSelected, onClick ->
-            DateCell(
-                date = date,
-                isSelected = isSelected,
-                shape = RoundedCornerShape(12.dp),
-                elevation = DateCellDefaults.DateCellElevation(
-                    selectedElevation = 4.dp,
-                    pastElevation = 2.dp,
-                    futureElevation = 2.dp
-                ),
-                border = DateCellDefaults.border(
-                    selectedBorderColor = Color.LightGray,
-                    pastBorderColor = Color.LightGray,
-                    futureBorderColor = Color.LightGray,
-                    selectedBorderWidth = 1.dp,
-                    pastBorderWidth = 1.dp,
-                    futureBorderWidth = 1.dp
-                ),
-                colors = DateCellDefaults.colors(
-                    selectedContainerColor = GreenPrimary,
-                    selectedTextColor = White,
-
-                    pastContainerColor = GrayLight,
-                    pastTextColor = GrayText,
-
-                    futureContainerColor = GreenLight,
-                    futureTextColor = White
-                ),
-                modifier = Modifier,
-                onDateSelected = onClick,
-            )
-        }
-    )
-}
 
 
 

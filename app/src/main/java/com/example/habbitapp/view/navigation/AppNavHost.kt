@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.habbitapp.MainPage
+import com.example.habbitapp.view.ui.page.AddAimPage
 import com.example.habbitapp.view.ui.page.AddTaskPage
 import com.example.habbitapp.view.ui.page.AimsAndObjectibesPage
 import com.example.habbitapp.view.ui.page.SettingsPage
@@ -58,6 +59,13 @@ fun AppNavHost(
             AddTaskPage(
                 toMainPageClick = {
                     navController.navigate(Destination.First.route)
+                }
+            )
+        }
+        composable(route = Destination.AddAim.route) {
+            AddAimPage(
+                toAimsPageClick = {
+                    navController.navigate(Destination.AimsAndObjectives.route)
                 }
             )
         }
