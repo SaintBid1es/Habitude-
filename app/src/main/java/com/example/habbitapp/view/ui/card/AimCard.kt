@@ -99,7 +99,9 @@ fun AimCard(aims: Aims, onUpdatePage: () -> Unit) {
             Row(verticalAlignment = Alignment.CenterVertically) {
 
                 Column(modifier = Modifier.padding(5.dp)) {
-                    Text(aims.name)
+                    Text(aims.name, textDecoration = if (aims.checkExec) {TextDecoration.LineThrough }else {
+                        null
+                    })
                     Row() {
                         Text(
                             "${aims.subAims.filter { it.value == true }.size}/${aims.subAims.size} ",
