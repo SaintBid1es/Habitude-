@@ -58,12 +58,13 @@ import kotlinx.coroutines.launch
 import io.github.chouaibmo.rowkalendar.RowKalendar
 import io.github.chouaibmo.rowkalendar.components.DateCell
 import io.github.chouaibmo.rowkalendar.components.DateCellDefaults
+import io.github.chouaibmo.rowkalendar.extensions.now
 import kotlinx.datetime.LocalDate
 
 @Composable
 fun AimsAndObjectibesPage( modifier: Modifier = Modifier,toMainPageClick: ()-> Unit,toAddAimsPageClick: ()-> Unit,onAimsClick: (Int) -> Unit,
                            ) {
-    var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
+    var selectedDate by remember { mutableStateOf<LocalDate?>(LocalDate.now()) }
     val viewModel: AimViewModel = viewModel()
     val tasks by viewModel.aim.collectAsStateWithLifecycle()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)

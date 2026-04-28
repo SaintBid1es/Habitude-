@@ -1,9 +1,6 @@
 package com.example.habbitapp.view.ui.card
 
 import android.annotation.SuppressLint
-import android.media.MediaPlayer
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateSizeAsState
@@ -40,7 +37,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.habbitapp.R
 import com.example.habbitapp.model.entity.Aims
 import com.example.habbitapp.viewmodel.AimViewModel
 import java.time.LocalDate
@@ -103,18 +99,21 @@ fun AimCard(aims: Aims, onUpdatePage: () -> Unit) {
                         null
                     })
                     Row() {
-                        Text(
-                            "${aims.subAims.filter { it.value == true }.size}/${aims.subAims.size} ",
-                            fontSize = 12.sp,
-                            color = Color.Gray,
-                            modifier = Modifier.clickable {
-                                onEnabledList = !onEnabledList
-                            })
-                        Text(text = if (onEnabledList) "⌵" else ">",
-                            fontSize = 12.sp,
-                            color = Color.Gray,modifier = Modifier.clickable {
-                                onEnabledList = !onEnabledList
-                            })
+                        if (aims.subAims !=null) {
+                            Text(
+                                "${aims.subAims.filter { it.value == true }.size}/${aims.subAims.size} ",
+                                fontSize = 12.sp,
+                                color = Color.Gray,
+                                modifier = Modifier.clickable {
+                                    onEnabledList = !onEnabledList
+                                })
+                            Text(
+                                text = if (onEnabledList) "⌵" else ">",
+                                fontSize = 12.sp,
+                                color = Color.Gray, modifier = Modifier.clickable {
+                                    onEnabledList = !onEnabledList
+                                })
+                        }
                         Text(" ${aims.category}")
 
 
@@ -147,7 +146,7 @@ fun AimCard(aims: Aims, onUpdatePage: () -> Unit) {
         }
         if (onEnabledList){
             LazyColumn(modifier = Modifier.padding(5.dp)) {
-                items(aims.subAims.toList()){it->
+                items(aims.subAims!!.toList()){it->
                     Row(verticalAlignment = Alignment.CenterVertically){
                         Text(it.first, textDecoration = if (it.second) {TextDecoration.LineThrough }else {
                             null
