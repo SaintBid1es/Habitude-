@@ -112,7 +112,9 @@ fun AddAimPage(toAimsPageClick: () -> Unit) {
             }) {
                 Icon(Icons.Default.DateRange, contentDescription = "")
             }
-            Text("${date}", fontWeight = FontWeight.Bold, fontSize = 15.sp)
+            Text("${date}", fontWeight = FontWeight.Bold, fontSize = 15.sp, modifier = Modifier.clickable{
+                onDialogCalendar = true
+            })
             if (onDialogCalendar) {
                 DatePickerModal(
                     onDateSelected = { selectedDate2 = it },
@@ -177,7 +179,9 @@ fun AddAimPage(toAimsPageClick: () -> Unit) {
                 color = Color.Green,
                 fontSize = 15.sp
             )
-            Text(selectedCategory, fontWeight = FontWeight.Bold)
+            Text(selectedCategory, fontWeight = FontWeight.Bold, modifier = Modifier.clickable{
+                 onDialogWindow = true
+            })
         }
         if (onDialogWindow) {
             AlertDialog(
@@ -239,10 +243,10 @@ fun AddAimPage(toAimsPageClick: () -> Unit) {
                 fontSize = 15.sp
             )
             when (selectedPriority) {
-                0 -> Text("Нет", fontWeight = FontWeight.Bold)
-                1 -> Text("Низкий", fontWeight = FontWeight.Bold)
-                2 -> Text("Средний", fontWeight = FontWeight.Bold)
-                3 -> Text("Высокий", fontWeight = FontWeight.Bold)
+                0 -> Text("Нет", fontWeight = FontWeight.Bold, modifier = Modifier.clickable{  openDialogPriority = true })
+                1 -> Text("Низкий", fontWeight = FontWeight.Bold, modifier = Modifier.clickable{  openDialogPriority = true })
+                2 -> Text("Средний", fontWeight = FontWeight.Bold, modifier = Modifier.clickable{  openDialogPriority = true })
+                3 -> Text("Высокий", fontWeight = FontWeight.Bold, modifier = Modifier.clickable{  openDialogPriority = true })
             }
 
         }

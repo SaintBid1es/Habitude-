@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -56,7 +57,7 @@ fun AimCard(aims: Aims, onUpdatePage: () -> Unit) {
 
     var onEnabledList by remember { mutableStateOf(false) }
 
-
+    var lineThrough:Boolean = aims.checkExec
     val color by animateColorAsState(
         targetValue = if (aims.checkExec){ Color.Green}
         else{
@@ -80,7 +81,11 @@ fun AimCard(aims: Aims, onUpdatePage: () -> Unit) {
         )
     )
 
-
+    if (aims.subAims?.filter { it.value == true }?.size == aims.subAims?.size) {
+        if (!aims.subAims.isNullOrEmpty()){
+            lineThrough = true
+        }
+    }
     Card(
         modifier = Modifier
             .padding(5.dp)
@@ -91,15 +96,21 @@ fun AimCard(aims: Aims, onUpdatePage: () -> Unit) {
         shape = RoundedCornerShape(5.dp),
 
     ) {
+
+
         Column {
             Row(verticalAlignment = Alignment.CenterVertically) {
 
                 Column(modifier = Modifier.padding(5.dp)) {
-                    Text(aims.name, textDecoration = if (aims.checkExec) {TextDecoration.LineThrough }else {
-                        null
-                    })
+                    Text(
+                        aims.name, textDecoration = if (lineThrough) {
+                            TextDecoration.LineThrough
+                        } else {
+                            null
+                        }
+                    )
                     Row() {
-                        if (aims.subAims !=null) {
+                        if (aims.subAims != null) {
                             Text(
                                 "${aims.subAims.filter { it.value == true }.size}/${aims.subAims.size} ",
                                 fontSize = 12.sp,
@@ -113,14 +124,19 @@ fun AimCard(aims: Aims, onUpdatePage: () -> Unit) {
                                 color = Color.Gray, modifier = Modifier.clickable {
                                     onEnabledList = !onEnabledList
                                 })
+
+                            Text(" ${aims.category}")
                         }
-                        Text(" ${aims.category}")
+
 
 
                     }
 
                 }
-                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
                     IconButton(onClick = {
                         if (!aims.checkExec) {
 //                        mediaPlayerSuccess.start()
@@ -145,7 +161,10 @@ fun AimCard(aims: Aims, onUpdatePage: () -> Unit) {
 
         }
         if (onEnabledList){
-            LazyColumn(modifier = Modifier.padding(5.dp)) {
+            LazyColumn(modifier = Modifier
+                .padding(5.dp)
+                .heightIn(max = 300.dp)
+            ) {
                 items(aims.subAims!!.toList()){it->
                     Row(verticalAlignment = Alignment.CenterVertically){
                         Text(it.first, textDecoration = if (it.second) {TextDecoration.LineThrough }else {
@@ -153,7 +172,9 @@ fun AimCard(aims: Aims, onUpdatePage: () -> Unit) {
                         }
                         )
                         IconButton(onClick = {
-                            val newAim = aims.copy(subAims =mapOf(it.first to !it.second))
+                            val list = aims.subAims
+                            list[it.first] = !it.second
+                            val newAim = aims.copy(subAims = list)
                             viewmodel.updateAim(newAim)
                         }) {
                             val colorSubAim by animateColorAsState(
@@ -177,11 +198,12 @@ fun AimCard(aims: Aims, onUpdatePage: () -> Unit) {
 
 }
 
+
 @SuppressLint("NewApi")
 @Composable
 @Preview
 fun AimCardPreview(){
-    val map:Map<String, Boolean> =mapOf("Купить продукты" to true,"Порезать овощи" to false,"В кастрюлю все закинть" to false)
+    val map:MutableMap<String, Boolean> =mutableMapOf("Купить продукты" to true,"Порезать овощи" to false,"В кастрюлю все закинть" to false)
     val date = LocalDate.now().toString()
     val aim = Aims(0,"Приготовить ужин",false,"Дом",1,false,map,date)
 

@@ -18,7 +18,7 @@ object StreakManager {
         val dayOfWeek = date.dayOfWeek.value - 1
 
         return when (task.repeat) {
-            1 -> true // Ежедневно
+            1 -> true
             2 -> task.days.getOrElse(dayOfWeek) { false }
             3 -> date.dayOfMonth == 1
             else -> false
@@ -237,8 +237,6 @@ object StreakManager {
         }
     }
 
-    @SuppressLint("NewApi")
-    fun getCurrentStreak(task: Task): Int {
-        return calculateCurrentStreak(task, task.completionDates)
-    }
+
 }
+

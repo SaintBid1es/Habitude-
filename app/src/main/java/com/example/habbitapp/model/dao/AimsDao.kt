@@ -24,7 +24,7 @@ interface AimsDao {
     fun getAllAims(): Flow<List<Aims>>
 
     @Query("SELECT * FROM aims WHERE id = :id")
-    suspend fun getAimById(id: Int): Aims?
+    suspend fun getAimById(id: Int): Aims
 
     @Query("Delete from aims WHERE id = :id")
     suspend fun deleteAimsById(id: Int)

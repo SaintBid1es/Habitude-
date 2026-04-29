@@ -39,7 +39,7 @@ class AimViewModel : ViewModel() {
         dao.delete(aim)
     }
 
-    suspend fun findByIdAim(id: Int): Aims? {
+    suspend fun findByIdAim(id: Int): Aims {
         return dao.getAimById(id)
     }
     suspend fun deleteByIdAims(id: Int) {

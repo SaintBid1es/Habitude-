@@ -15,6 +15,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
@@ -62,8 +63,12 @@ import io.github.chouaibmo.rowkalendar.extensions.now
 import kotlinx.datetime.LocalDate
 
 @Composable
-fun AimsAndObjectibesPage( modifier: Modifier = Modifier,toMainPageClick: ()-> Unit,toAddAimsPageClick: ()-> Unit,onAimsClick: (Int) -> Unit,
-                           ) {
+fun AimsAndObjectibesPage(
+    modifier: Modifier = Modifier,
+    toMainPageClick: () -> Unit,
+    toAddAimsPageClick: () -> Unit,
+    onAimsClick: (Int) -> Unit,
+) {
     var selectedDate by remember { mutableStateOf<LocalDate?>(LocalDate.now()) }
     val viewModel: AimViewModel = viewModel()
     val tasks by viewModel.aim.collectAsStateWithLifecycle()
@@ -88,7 +93,7 @@ fun AimsAndObjectibesPage( modifier: Modifier = Modifier,toMainPageClick: ()-> U
                     onClick = { toMainPageClick() }
                 )
                 NavigationDrawerItem(
-                    label = { Text("Управление целями и задачами") },
+                    label = { Text("Управление задачами") },
                     icon = {
                         Icon(
                             painter = painterResource(R.drawable.mission_ic),
@@ -105,13 +110,39 @@ fun AimsAndObjectibesPage( modifier: Modifier = Modifier,toMainPageClick: ()-> U
                         }
                     }
                 )
+                NavigationDrawerItem(
+                    label = { Text("Уровень продуктивности") },
+                    icon = {
+                        Icon(
+                            painter = painterResource(R.drawable.graphic_ic),
+                            contentDescription = null,
+                            modifier = Modifier.size(25.dp)
+                        )
+                    },
+                    selected = false,
+                    onClick = { toMainPageClick() }
+                )
+                NavigationDrawerItem(
+                    label = { Text("Настройки") },
+                    icon = {
+                        Icon(
+                            Icons.Default.Settings,
+                            contentDescription = null,
+                            modifier = Modifier.size(25.dp)
+                        )
+                    },
+                    selected = false,
+                    onClick = { toMainPageClick() }
+                )
 
             }
         }
     ) {
 
 
-        Column(modifier = Modifier.fillMaxSize().padding(15.dp)) {
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .padding(15.dp)) {
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -169,7 +200,7 @@ fun AimsAndObjectibesPage( modifier: Modifier = Modifier,toMainPageClick: ()-> U
                             futureTextColor = White
                         ),
                         modifier = Modifier,
-                        onDateSelected = { clickedDate->
+                        onDateSelected = { clickedDate ->
                             onClick(clickedDate)
                             selectedDate = clickedDate
                         },
@@ -180,23 +211,40 @@ fun AimsAndObjectibesPage( modifier: Modifier = Modifier,toMainPageClick: ()-> U
 
 
 
-            LazyColumn(modifier = Modifier.fillMaxSize().padding(10.dp)) {
+            LazyColumn(modifier = Modifier
+                .fillMaxSize()
+                .padding(10.dp)) {
+                val list = tasks.filter { it.date == selectedDate.toString() }
 
-                        items(tasks.filter { it.date == selectedDate.toString() }) { task ->
-                            AimCard (task, onUpdatePage = {
-                                onAimsClick(task.id)
-                            })
-
-                        }
-                    }
-
-
+                items(list.filter { it.priority == 3 }) { task ->
+                    AimCard(task, onUpdatePage = {
+                        onAimsClick(task.id)
+                    })
+                }
+                items(list.filter { it.priority == 2 }) { task ->
+                    AimCard(task, onUpdatePage = {
+                        onAimsClick(task.id)
+                    })
+                }
+                items(list.filter { it.priority == 1 }) { task ->
+                    AimCard(task, onUpdatePage = {
+                        onAimsClick(task.id)
+                    })
+                }
+                items(list.filter { it.priority == 0 }) { task ->
+                    AimCard(task, onUpdatePage = {
+                        onAimsClick(task.id)
+                    })
+                }
+            }
 
 
         }
         Box(
             contentAlignment = Alignment.BottomEnd,
-            modifier = Modifier.fillMaxSize().padding(30.dp)
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(30.dp)
         ) {
             FloatingActionButton(
                 onClick = toAddAimsPageClick,
@@ -211,13 +259,13 @@ fun AimsAndObjectibesPage( modifier: Modifier = Modifier,toMainPageClick: ()-> U
 
 @Preview
 @Composable
-fun AimsAndObjectibesPagePreview(){
-AimsAndObjectibesPage(
+fun AimsAndObjectibesPagePreview() {
+    AimsAndObjectibesPage(
 
-    toMainPageClick = {},
-    toAddAimsPageClick = {},
-    onAimsClick = {}
-)
+        toMainPageClick = {},
+        toAddAimsPageClick = {},
+        onAimsClick = {}
+    )
 }
 
 

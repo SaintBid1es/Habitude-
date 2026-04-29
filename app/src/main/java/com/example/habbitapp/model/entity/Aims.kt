@@ -15,6 +15,6 @@ data class Aims(
     val category: String,
     val priority: Int,
     val autotransfer: Boolean,
-    val subAims: Map<String, Boolean>?,
+    val subAims: MutableMap<String, Boolean>?,
     val date: String
     )

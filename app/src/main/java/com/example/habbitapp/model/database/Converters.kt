@@ -1,6 +1,8 @@
 package com.example.habbitapp.model.database
 
+import androidx.compose.runtime.toMutableStateMap
 import androidx.room.TypeConverter
+import java.util.Collections.emptyMap
 
 class Converters {
 
@@ -37,7 +39,7 @@ class Converters {
         }
     }
     @TypeConverter
-    fun fromMapStringBoolean(map: Map<String, Boolean>): String {
+    fun fromMapStringBoolean(map: MutableMap <String, Boolean>): String {
         if (map.isEmpty()) return ""
         return map.entries.joinToString(separator = ";") { entry ->
             "${entry.key}:${if (entry.value) "1" else "0"}"
@@ -45,7 +47,7 @@ class Converters {
     }
 
     @TypeConverter
-    fun toMapStringBoolean(data: String): Map<String, Boolean> {
+    fun toMapStringBoolean(data: String): MutableMap <String, Boolean> {
         if (data.isEmpty()) return emptyMap()
 
         return data.split(";")
@@ -57,6 +59,6 @@ class Converters {
                     key to value
                 } else null
             }
-            .toMap()
+            .toMutableStateMap()
     }
 }
