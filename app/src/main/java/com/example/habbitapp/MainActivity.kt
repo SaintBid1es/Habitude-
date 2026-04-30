@@ -134,6 +134,12 @@ fun MainPage( modifier: Modifier = Modifier,toAddTaskPageClick: ()-> Unit,onTask
                     scope.launch {drawerState.open()} }) {
                     Icon(Icons.Filled.Menu, "Меню")
                 }
+                IconButton(onClick = {
+
+                }
+                ) {
+                    Icon(painterResource(R.drawable.language_ic), "Меню")
+                }
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center

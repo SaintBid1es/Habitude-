@@ -55,13 +55,18 @@ dependencies {
 
     // Room
     implementation("androidx.room:room-runtime:2.6.1")
-    implementation("androidx.room:room-ktx:2.6.1") // Kotlin
+    implementation("androidx.room:room-ktx:2.6.1")
+    implementation(libs.androidx.work.runtime.ktx)
+    implementation(libs.transport.runtime) // Kotlin
     // KSP
     ksp("androidx.room:room-compiler:2.6.1")
 
     // row calendar
     implementation("io.github.chouaibmo:rowkalendar:0.0.3")
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.0.3")
+    // hilt
+    implementation("androidx.hilt:hilt-work:1.2.0")
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

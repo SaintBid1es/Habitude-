@@ -45,5 +45,10 @@ class AimViewModel : ViewModel() {
     suspend fun deleteByIdAims(id: Int) {
         return dao.deleteAimsById(id)
     }
+    suspend fun migrateUnfinishedTasks(today:String){
+        viewModelScope.launch {
+            dao.migrateOldTasks(today)
+        }
+    }
 
 }

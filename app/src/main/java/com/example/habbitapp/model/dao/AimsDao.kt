@@ -28,4 +28,9 @@ interface AimsDao {
 
     @Query("Delete from aims WHERE id = :id")
     suspend fun deleteAimsById(id: Int)
+
+
+    @Query("UPDATE aims SET date = :newDate WHERE checkExec = 0 AND autotransfer = 1 AND date < :newDate")
+    suspend fun migrateOldTasks(newDate: String)
+
 }
