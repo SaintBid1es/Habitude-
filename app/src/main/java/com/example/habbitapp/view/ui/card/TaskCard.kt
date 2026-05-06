@@ -37,6 +37,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -44,6 +45,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.habbitapp.model.entity.Task
 import com.example.habbitapp.model.utils.StreakManager
 import com.example.habbitapp.viewmodel.TaskViewModel
+import com.example.habbitapp.R
 
 
 @SuppressLint("NewApi")
@@ -112,9 +114,9 @@ fun TaskCard(task: Task, onUpdatePage: () -> Unit) {
                             )
                         }
                     ) { targetCount ->
-                        Text(text = "$targetCount", fontSize = 10.sp)
+                        Text(text = "$targetCount ", fontSize = 10.sp)
                     }
-                    Text(" Days", fontSize = 10.sp)
+                    Text(stringResource(R.string.task_days_suffix), fontSize = 10.sp)
                 }
             }
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
@@ -131,7 +133,7 @@ fun TaskCard(task: Task, onUpdatePage: () -> Unit) {
                 }) {
                     Icon(
                         Icons.Filled.CheckCircle,
-                        contentDescription = if (task.checkExec) "Отменить" else "Выполнить",
+                        contentDescription = if (task.checkExec) stringResource(R.string.cd_undo) else stringResource(R.string.cd_complete),
                         tint = color,
                         modifier = Modifier.size(size.width.dp,size.height.dp)
                     )

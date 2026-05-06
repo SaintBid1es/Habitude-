@@ -23,8 +23,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.habbitapp.R
 
 @Composable
 fun ColorCircleRow(colors: List<Color>,
@@ -47,7 +49,7 @@ fun ColorCircleRow(colors: List<Color>,
                 if (selectedColor == color) {
                     Icon(
                         imageVector = Icons.Default.Check,
-                        contentDescription = "Выбрано",
+                        contentDescription = stringResource(R.string.cd_selected),
 
                         modifier = Modifier.size(20.dp)
                     )

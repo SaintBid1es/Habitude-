@@ -48,6 +48,7 @@ object StreakManager {
         )
     }
 
+
     @SuppressLint("NewApi")
     fun onTaskUncompleted(task: Task): Task {
         val today = LocalDate.now()

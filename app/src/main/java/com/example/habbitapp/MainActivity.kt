@@ -2,9 +2,11 @@ package com.example.habbitapp
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import androidx.core.os.LocaleListCompat
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -43,6 +45,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -76,8 +79,8 @@ class MainActivity : ComponentActivity() {
 
 @SuppressLint("NewApi")
 @Composable
-fun MainPage( modifier: Modifier = Modifier,toAddTaskPageClick: ()-> Unit,onTaskClick: (Int) -> Unit,
-              toAimsAndObjectivesPageClick: ()-> Unit) {
+fun MainPage(toAddTaskPageClick: ()-> Unit,onTaskClick: (Int) -> Unit,
+              toAimsAndObjectivesPageClick: ()-> Unit,toSettingsPage: ()-> Unit,toProductivityPage: ()-> Unit) {
     var selectedFilter by remember { mutableIntStateOf(0) }
     val viewModel: TaskViewModel = viewModel()
     val tasks  by viewModel.task.collectAsStateWithLifecycle()
@@ -87,10 +90,10 @@ fun MainPage( modifier: Modifier = Modifier,toAddTaskPageClick: ()-> Unit,onTask
         drawerState = drawerState,
         drawerContent = {
             ModalDrawerSheet {
-                Text("Navigation", modifier = Modifier.padding(16.dp))
+                Text(stringResource(R.string.drawer_navigation), modifier = Modifier.padding(16.dp))
                 HorizontalDivider()
                 NavigationDrawerItem(
-                    label = { Text("Управление привычками") },
+                    label = { Text(stringResource(R.string.menu_habits)) },
                     icon = { Icon(painter = painterResource(R.drawable.habit_ic), contentDescription = null,modifier= Modifier.size(25.dp)) },
                     selected = false,
                     onClick = { scope.launch {
@@ -101,22 +104,22 @@ fun MainPage( modifier: Modifier = Modifier,toAddTaskPageClick: ()-> Unit,onTask
                     }
                 )
                 NavigationDrawerItem(
-                    label = { Text("Управление задачами") },
+                    label = { Text(stringResource(R.string.menu_tasks)) },
                     icon = { Icon(painter = painterResource(R.drawable.mission_ic), contentDescription = null,modifier= Modifier.size(25.dp)) },
                     selected = false,
                     onClick = { toAimsAndObjectivesPageClick() }
                 )
                 NavigationDrawerItem(
-                    label = { Text("Уровень продуктивности") },
+                    label = { Text(stringResource(R.string.menu_productivity)) },
                     icon = { Icon(painter = painterResource(R.drawable.graphic_ic), contentDescription = null,modifier= Modifier.size(25.dp)) },
                     selected = false,
-                    onClick = { toAimsAndObjectivesPageClick() }
+                    onClick = { toProductivityPage() }
                 )
                 NavigationDrawerItem(
-                    label = { Text("Настройки") },
+                    label = { Text(stringResource(R.string.menu_settings)) },
                     icon = { Icon(Icons.Default.Settings, contentDescription = null,modifier= Modifier.size(25.dp)) },
                     selected = false,
-                    onClick = { toAimsAndObjectivesPageClick() }
+                    onClick = { toSettingsPage() }
                 )
 
             }
@@ -132,22 +135,24 @@ fun MainPage( modifier: Modifier = Modifier,toAddTaskPageClick: ()-> Unit,onTask
             ) {
                 IconButton(onClick = {
                     scope.launch {drawerState.open()} }) {
-                    Icon(Icons.Filled.Menu, "Меню")
+                    Icon(Icons.Filled.Menu, stringResource(R.string.cd_menu))
                 }
                 IconButton(onClick = {
-
+                    val currentLanguage = AppCompatDelegate.getApplicationLocales()[0]?.language ?: "en"
+                    val nextLanguage = if (currentLanguage == "ru") "en" else "ru"
+                    AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(nextLanguage))
                 }
                 ) {
-                    Icon(painterResource(R.drawable.language_ic), "Меню")
+                    Icon(painterResource(R.drawable.language_ic), stringResource(R.string.cd_menu))
                 }
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center
                 ) {
 
-                    Text("Habit", fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                    Text(stringResource(R.string.title_habit), fontWeight = FontWeight.Bold, fontSize = 20.sp)
                     Text(
-                        "App",
+                        stringResource(R.string.title_app),
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp,
                         modifier = Modifier.padding(start = 10.dp),
@@ -160,22 +165,22 @@ fun MainPage( modifier: Modifier = Modifier,toAddTaskPageClick: ()-> Unit,onTask
                 horizontalArrangement = Arrangement.SpaceAround
             ) {
                 FilterChip(
-                    text = "Today",
+                    text = stringResource(R.string.filter_today),
                     isSelected = selectedFilter == 0,
                     onClick = { selectedFilter = 0 }
                 )
                 FilterChip(
-                    text = "Weekly",
+                    text = stringResource(R.string.filter_weekly),
                     isSelected = selectedFilter == 1,
                     onClick = { selectedFilter = 1 }
                 )
                 FilterChip(
-                    text = "Monthly",
+                    text = stringResource(R.string.filter_monthly),
                     isSelected = selectedFilter == 2,
                     onClick = { selectedFilter = 2 }
                 )
                 FilterChip(
-                    text = "Overall",
+                    text = stringResource(R.string.filter_overall),
                     isSelected = selectedFilter == 3,
                     onClick = { selectedFilter = 3 }
                 )
@@ -233,7 +238,7 @@ fun MainPage( modifier: Modifier = Modifier,toAddTaskPageClick: ()-> Unit,onTask
             FloatingActionButton(
                 onClick = toAddTaskPageClick,
             ) {
-                Icon(Icons.Filled.Add, contentDescription = "Добавить")
+                Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.cd_add))
             }
         }
     }
@@ -244,7 +249,9 @@ fun MainPage( modifier: Modifier = Modifier,toAddTaskPageClick: ()-> Unit,onTask
 fun MainPagePreview() {
     HabbitAppTheme {
         MainPage(
-             toAddTaskPageClick = {}, onTaskClick = {}, toAimsAndObjectivesPageClick = {}
+            toAddTaskPageClick = {}, onTaskClick = {}, toAimsAndObjectivesPageClick = {},
+            toSettingsPage = {},
+            toProductivityPage = {}
         )
     }
 }

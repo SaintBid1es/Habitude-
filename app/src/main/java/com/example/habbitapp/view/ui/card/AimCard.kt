@@ -33,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -40,6 +41,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.habbitapp.model.entity.Aims
 import com.example.habbitapp.viewmodel.AimViewModel
+import com.example.habbitapp.R
 import java.time.LocalDate
 
 
@@ -150,7 +152,7 @@ fun AimCard(aims: Aims, onUpdatePage: () -> Unit) {
                     }) {
                         Icon(
                             Icons.Filled.CheckCircle,
-                            contentDescription = if (aims.checkExec) "Отменить" else "Выполнить",
+                            contentDescription = if (aims.checkExec) stringResource(R.string.cd_undo) else stringResource(R.string.cd_complete),
                             tint = color,
                             modifier = Modifier.size(size.width.dp, size.height.dp)
                         )

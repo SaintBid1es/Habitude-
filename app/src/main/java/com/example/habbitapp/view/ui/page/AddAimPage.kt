@@ -34,12 +34,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.habbitapp.model.entity.Aims
+import com.example.habbitapp.R
 import com.example.habbitapp.viewmodel.AimViewModel
 import io.github.chouaibmo.rowkalendar.extensions.now
 import kotlinx.coroutines.launch
@@ -53,9 +55,16 @@ import java.util.Locale
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddAimPage(toAimsPageClick: () -> Unit) {
-
+    val noneCategory = stringResource(R.string.aim_none)
+    val shoppingCategory = stringResource(R.string.aim_category_shopping)
+    val homeCategory = stringResource(R.string.aim_category_home)
+    val workCategory = stringResource(R.string.aim_category_work)
+    val familyCategory = stringResource(R.string.aim_category_family)
+    val healthCategory = stringResource(R.string.aim_category_health)
+    val financeCategory = stringResource(R.string.aim_category_finance)
+    val funCategory = stringResource(R.string.aim_category_fun)
     var text by remember { mutableStateOf("") }
-    var selectedCategory by remember { mutableStateOf("Нет") }
+    var selectedCategory by remember { mutableStateOf(noneCategory) }
     var selectedPriority by remember { mutableIntStateOf(0) }
     val viewModelAim: AimViewModel = viewModel()
     var openDialogPriority by remember { mutableStateOf(false) }
@@ -81,7 +90,7 @@ fun AddAimPage(toAimsPageClick: () -> Unit) {
             IconButton(onClick = toAimsPageClick) {
                 Icon(Icons.Filled.Close, contentDescription = "")
             }
-            Text("Save", modifier = Modifier.clickable {
+            Text(stringResource(R.string.action_save), modifier = Modifier.clickable {
                 scope.launch {
 
                     val aim = Aims(
@@ -132,7 +141,7 @@ fun AddAimPage(toAimsPageClick: () -> Unit) {
             TextField(
                 value = text,
                 onValueChange = { text = it },
-                label = { Text("task name") },
+                label = { Text(stringResource(R.string.label_task_name)) },
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = Color.Transparent,
                     unfocusedContainerColor = Color.Transparent,
@@ -173,7 +182,7 @@ fun AddAimPage(toAimsPageClick: () -> Unit) {
             horizontalArrangement = Arrangement.Center
         ) {
             Text(
-                "Category >  ", modifier = Modifier
+                stringResource(R.string.aim_category), modifier = Modifier
                     .padding(10.dp)
                     .clickable { onDialogWindow = true }, fontWeight = FontWeight.Bold,
                 color = Color.Green,
@@ -193,37 +202,40 @@ fun AddAimPage(toAimsPageClick: () -> Unit) {
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Text(
-                            "Нет",
-                            modifier = Modifier.clickable { onDialogWindow = false },
+                            stringResource(R.string.aim_none),
+                            modifier = Modifier.clickable {
+                                selectedCategory = noneCategory
+                                onDialogWindow = false
+                            },
                             fontWeight = FontWeight.Bold,
                             fontSize = 15.sp
                         )
-                        Text("Покупки", modifier = Modifier.clickable {
-                            selectedCategory = "Покупки"
+                        Text(shoppingCategory, modifier = Modifier.clickable {
+                            selectedCategory = shoppingCategory
                             onDialogWindow = false
                         }, fontWeight = FontWeight.Bold, fontSize = 15.sp)
-                        Text("Дом", modifier = Modifier.clickable {
-                            selectedCategory = "Дом"
+                        Text(homeCategory, modifier = Modifier.clickable {
+                            selectedCategory = homeCategory
                             onDialogWindow = false
                         }, fontWeight = FontWeight.Bold, fontSize = 15.sp)
-                        Text("Работа", modifier = Modifier.clickable {
-                            selectedCategory = "Работа"
+                        Text(workCategory, modifier = Modifier.clickable {
+                            selectedCategory = workCategory
                             onDialogWindow = false
                         }, fontWeight = FontWeight.Bold, fontSize = 15.sp)
-                        Text("Семья", modifier = Modifier.clickable {
-                            selectedCategory = "Семья"
+                        Text(familyCategory, modifier = Modifier.clickable {
+                            selectedCategory = familyCategory
                             onDialogWindow = false
                         }, fontWeight = FontWeight.Bold, fontSize = 15.sp)
-                        Text("Здоровье", modifier = Modifier.clickable {
-                            selectedCategory = "Здоровье"
+                        Text(healthCategory, modifier = Modifier.clickable {
+                            selectedCategory = healthCategory
                             onDialogWindow = false
                         }, fontWeight = FontWeight.Bold, fontSize = 15.sp)
-                        Text("Финансы", modifier = Modifier.clickable {
-                            selectedCategory = "Финансы"
+                        Text(financeCategory, modifier = Modifier.clickable {
+                            selectedCategory = financeCategory
                             onDialogWindow = false
                         }, fontWeight = FontWeight.Bold, fontSize = 15.sp)
-                        Text("Развлечения", modifier = Modifier.clickable {
-                            selectedCategory = "Развлечения"
+                        Text(funCategory, modifier = Modifier.clickable {
+                            selectedCategory = funCategory
                             onDialogWindow = false
                         }, fontWeight = FontWeight.Bold, fontSize = 15.sp)
                     }
@@ -236,17 +248,17 @@ fun AddAimPage(toAimsPageClick: () -> Unit) {
             horizontalArrangement = Arrangement.Center
         ) {
             Text(
-                "Priority >", modifier = Modifier
+                stringResource(R.string.aim_priority), modifier = Modifier
                     .padding(10.dp)
                     .clickable { openDialogPriority = true }, fontWeight = FontWeight.Bold,
                 color = Color.Green,
                 fontSize = 15.sp
             )
             when (selectedPriority) {
-                0 -> Text("Нет", fontWeight = FontWeight.Bold, modifier = Modifier.clickable{  openDialogPriority = true })
-                1 -> Text("Низкий", fontWeight = FontWeight.Bold, modifier = Modifier.clickable{  openDialogPriority = true })
-                2 -> Text("Средний", fontWeight = FontWeight.Bold, modifier = Modifier.clickable{  openDialogPriority = true })
-                3 -> Text("Высокий", fontWeight = FontWeight.Bold, modifier = Modifier.clickable{  openDialogPriority = true })
+                0 -> Text(stringResource(R.string.aim_none), fontWeight = FontWeight.Bold, modifier = Modifier.clickable{  openDialogPriority = true })
+                1 -> Text(stringResource(R.string.aim_low), fontWeight = FontWeight.Bold, modifier = Modifier.clickable{  openDialogPriority = true })
+                2 -> Text(stringResource(R.string.aim_medium), fontWeight = FontWeight.Bold, modifier = Modifier.clickable{  openDialogPriority = true })
+                3 -> Text(stringResource(R.string.aim_high), fontWeight = FontWeight.Bold, modifier = Modifier.clickable{  openDialogPriority = true })
             }
 
         }
@@ -259,20 +271,20 @@ fun AddAimPage(toAimsPageClick: () -> Unit) {
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text("Нет", modifier = Modifier.clickable {
+                        Text(stringResource(R.string.aim_none), modifier = Modifier.clickable {
                             selectedPriority = 0
                             openDialogPriority = false
                         }, fontSize = 15.sp, fontWeight = FontWeight.Bold)
 
-                        Text("Низкий", modifier = Modifier.clickable {
+                        Text(stringResource(R.string.aim_low), modifier = Modifier.clickable {
                             selectedPriority = 1
                             openDialogPriority = false
                         }, fontSize = 15.sp, fontWeight = FontWeight.Bold)
-                        Text("Средний", modifier = Modifier.clickable {
+                        Text(stringResource(R.string.aim_medium), modifier = Modifier.clickable {
                             selectedPriority = 2
                             openDialogPriority = false
                         }, fontSize = 15.sp, fontWeight = FontWeight.Bold)
-                        Text("Высокий", modifier = Modifier.clickable {
+                        Text(stringResource(R.string.aim_high), modifier = Modifier.clickable {
                             selectedPriority = 3
                             openDialogPriority = false
                         }, fontSize = 15.sp, fontWeight = FontWeight.Bold)
@@ -290,7 +302,7 @@ fun AddAimPage(toAimsPageClick: () -> Unit) {
                 .padding(15.dp)
         ) {
             Text(
-                "Automatic transfer",
+                stringResource(R.string.aim_auto_transfer),
                 fontWeight = FontWeight.Bold,
                 color = Color.Green,
                 fontSize = 15.sp
@@ -333,12 +345,12 @@ fun DatePickerModal(
                 onDateSelected(datePickerState.selectedDateMillis)
                 onDismiss()
             }) {
-                Text("OK")
+                Text(stringResource(R.string.date_picker_ok))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Cancel")
+                Text(stringResource(R.string.action_cancel))
             }
         }
     ) {

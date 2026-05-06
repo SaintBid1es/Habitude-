@@ -5,10 +5,13 @@ import androidx.lifecycle.viewModelScope
 import com.example.habbitapp.model.database.ItemDatabase
 import com.example.habbitapp.MyApplication
 import com.example.habbitapp.model.entity.Task
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.count
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.getValue
 
 class TaskViewModel() : ViewModel() {
@@ -20,7 +23,6 @@ class TaskViewModel() : ViewModel() {
     val task: StateFlow<List<Task>> = _tasks
 
     init {
-
         viewModelScope.launch {
             dao.getAllTask().collectLatest { taskList ->
                 _tasks.value = taskList
@@ -31,6 +33,13 @@ class TaskViewModel() : ViewModel() {
     fun insertTask(task: Task) = viewModelScope.launch {
         dao.insert(task)
     }
+    suspend fun getCountTask():Int {
+        return withContext(Dispatchers.IO) {
+            dao.getAllTaskCount()
+        }
+
+    }
+
 
     fun updateTask(task: Task) = viewModelScope.launch {
         dao.update(task)
@@ -40,12 +49,20 @@ class TaskViewModel() : ViewModel() {
         dao.delete(task)
     }
 
+     suspend fun getIndicator(date: String,allTasks:Int): Int {
+         return withContext(Dispatchers.IO) {
+             dao.getIndicator(date, allTasks)
+         }
+    }
+
     suspend fun findByIdTask(id: Int): Task? {
         return dao.getTaskById(id)
     }
+
     suspend fun deleteByIdTask(id: Int) {
         return dao.deleteTaskById(id)
     }
+
     suspend fun insertTaskAndGetId(task: Task): Long {
         return dao.insertTaskAndGetId(task)
     }

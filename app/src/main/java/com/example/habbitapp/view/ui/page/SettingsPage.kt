@@ -10,14 +10,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.habbitapp.R
 
 @Composable
 fun SettingsPage(toMainPageClick:()-> Unit){
     Column(modifier = Modifier.fillMaxSize().padding(10.dp)){
         Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment =  Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-            Text("Settings", modifier = Modifier.clickable{
+            Text(stringResource(R.string.settings_title), modifier = Modifier.clickable{
                 toMainPageClick()
             }
 

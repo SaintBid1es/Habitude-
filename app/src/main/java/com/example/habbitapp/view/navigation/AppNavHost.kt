@@ -10,6 +10,7 @@ import com.example.habbitapp.MainPage
 import com.example.habbitapp.view.ui.page.AddAimPage
 import com.example.habbitapp.view.ui.page.AddTaskPage
 import com.example.habbitapp.view.ui.page.AimsAndObjectibesPage
+import com.example.habbitapp.view.ui.page.LevelProductivityPage
 import com.example.habbitapp.view.ui.page.SettingsPage
 import com.example.habbitapp.view.ui.page.UpdateAimPage
 import com.example.habbitapp.view.ui.page.UpdateTaskPage
@@ -32,6 +33,12 @@ fun AppNavHost(
                     navController.navigate(Destination.EditTask.passId(taskId))
                 }, toAimsAndObjectivesPageClick = {
                     navController.navigate(Destination.AimsAndObjectives.route)
+                },
+                toSettingsPage = {
+                    navController.navigate(Destination.Settings.route)
+                },
+                toProductivityPage = {
+                    navController.navigate(Destination.Productivity.route)
                 }
             ) 
         }
@@ -54,6 +61,29 @@ fun AppNavHost(
                     navController.navigate(Destination.EditAim.passId(aimId))
                 }
             )
+        }
+        composable(route = Destination.Productivity.route) {
+            LevelProductivityPage(
+                toAddTaskPageClick = {
+                    navController.navigate(Destination.AddTask.route)
+                },
+                onTaskClick = { taskId ->
+                    navController.navigate(Destination.EditTask.passId(taskId))
+                }, toAimsAndObjectivesPageClick = {
+                    navController.navigate(Destination.AimsAndObjectives.route)
+                },
+                toSettingsPage = {
+                    navController.navigate(Destination.Settings.route)
+                },
+                toMainPage = {
+                    navController.navigate(Destination.First.route)
+                }
+            )
+        }
+        composable(route = Destination.Settings.route) {
+            SettingsPage {
+
+            }
         }
         composable(route = Destination.AddTask.route) {
             AddTaskPage(

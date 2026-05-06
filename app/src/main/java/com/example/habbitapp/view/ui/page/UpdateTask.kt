@@ -34,12 +34,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.habbitapp.FilterChip
+import com.example.habbitapp.R
 import com.example.habbitapp.model.entity.Reminder
 import com.example.habbitapp.model.entity.Task
 import com.example.habbitapp.model.utils.setTimeNotification
@@ -138,7 +140,7 @@ fun UpdateTaskPage(toMainPageClick: ()-> Unit,idTask: Int) {
                 Icon(Icons.Filled.Close, contentDescription = "")
             }
 
-            Text("Save", modifier = Modifier.clickable {
+            Text(stringResource(R.string.action_save), modifier = Modifier.clickable {
                 scope.launch {
                     val taskCurrent = viewModelTask.findByIdTask(idTask)
                     val reminderCurrent = viewModelReminder.findByIdReminderTask(idTask)
@@ -221,7 +223,7 @@ fun UpdateTaskPage(toMainPageClick: ()-> Unit,idTask: Int) {
                 TextField(
                     value = text,
                     onValueChange = { text = it },
-                    label = { Text("Habit Name") },
+                    label = { Text(stringResource(R.string.label_habit_name)) },
                     colors = TextFieldDefaults.colors(
                         focusedContainerColor = Color.Transparent,
                         unfocusedContainerColor = Color.Transparent,
@@ -232,7 +234,7 @@ fun UpdateTaskPage(toMainPageClick: ()-> Unit,idTask: Int) {
                 TextField(
                     value = description,
                     onValueChange = { description = it },
-                    label = { Text("Add description") },
+                    label = { Text(stringResource(R.string.label_add_description)) },
                     colors = TextFieldDefaults.colors(
                         focusedContainerColor = Color.Transparent,
                         unfocusedContainerColor = Color.Transparent,
@@ -251,32 +253,32 @@ fun UpdateTaskPage(toMainPageClick: ()-> Unit,idTask: Int) {
             ColorCircleRow(colors, selectedBackgroundColor, onColorSelected = { color ->
                 selectedBackgroundColor = color
             })
-            Text("Repeat", modifier = Modifier.padding(10.dp), fontWeight = FontWeight.Bold)
+            Text(stringResource(R.string.label_repeat), modifier = Modifier.padding(10.dp), fontWeight = FontWeight.Bold)
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(10.dp), horizontalArrangement = Arrangement.spacedBy(60.dp)
             ) {
-                FilterChip("Daily", selectedFilterRepeat == 1, { selectedFilterRepeat = 1 })
-                FilterChip("Weekly", selectedFilterRepeat == 2, { selectedFilterRepeat = 2 })
-                FilterChip("Monthly", selectedFilterRepeat == 3, { selectedFilterRepeat = 3 })
+                FilterChip(stringResource(R.string.filter_daily), selectedFilterRepeat == 1, { selectedFilterRepeat = 1 })
+                FilterChip(stringResource(R.string.filter_weekly), selectedFilterRepeat == 2, { selectedFilterRepeat = 2 })
+                FilterChip(stringResource(R.string.filter_monthly), selectedFilterRepeat == 3, { selectedFilterRepeat = 3 })
             }
-            Text("On these days", modifier = Modifier.padding(10.dp), fontWeight = FontWeight.Bold)
+            Text(stringResource(R.string.label_days), modifier = Modifier.padding(10.dp), fontWeight = FontWeight.Bold)
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(7.dp), horizontalArrangement = Arrangement.spacedBy(2.dp)
             ) {
                 FilterChipDays(
-                    "Mon",
+                    stringResource(R.string.day_mon),
                     selectedFilterMonday,
                     { selectedFilterMonday = !selectedFilterMonday })
-                FilterChipDays("Tue", selectedFilterTue, { selectedFilterTue = !selectedFilterTue })
-                FilterChipDays("Wed", selectedFilterWed, { selectedFilterWed = !selectedFilterWed })
-                FilterChipDays("Thu", selectedFilterThu, { selectedFilterThu = !selectedFilterThu })
-                FilterChipDays("Fri", selectedFilterFri, { selectedFilterFri = !selectedFilterFri })
-                FilterChipDays("Sat", selectedFilterSat, { selectedFilterSat = !selectedFilterSat })
-                FilterChipDays("Sun", selectedFilterSun, { selectedFilterSun = !selectedFilterSun })
+                FilterChipDays(stringResource(R.string.day_tue), selectedFilterTue, { selectedFilterTue = !selectedFilterTue })
+                FilterChipDays(stringResource(R.string.day_wed), selectedFilterWed, { selectedFilterWed = !selectedFilterWed })
+                FilterChipDays(stringResource(R.string.day_thu), selectedFilterThu, { selectedFilterThu = !selectedFilterThu })
+                FilterChipDays(stringResource(R.string.day_fri), selectedFilterFri, { selectedFilterFri = !selectedFilterFri })
+                FilterChipDays(stringResource(R.string.day_sat), selectedFilterSat, { selectedFilterSat = !selectedFilterSat })
+                FilterChipDays(stringResource(R.string.day_sun), selectedFilterSun, { selectedFilterSun = !selectedFilterSun })
             }
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -285,7 +287,7 @@ fun UpdateTaskPage(toMainPageClick: ()-> Unit,idTask: Int) {
                     .fillMaxWidth()
                     .padding(15.dp)
             ) {
-                Text("Reminder", fontWeight = FontWeight.Bold)
+                Text(stringResource(R.string.label_reminder), fontWeight = FontWeight.Bold)
                 if (checkedState.value) {
                     TimePickerWithDialog(
                         onTimeSelected = { selectedHour, selectedMinute ->
@@ -309,7 +311,7 @@ fun UpdateTaskPage(toMainPageClick: ()-> Unit,idTask: Int) {
                     .fillMaxWidth()
                     .padding(15.dp)
             ) {
-                Text("Delete", fontWeight = FontWeight.Bold)
+                Text(stringResource(R.string.label_delete), fontWeight = FontWeight.Bold)
                 IconButton(onClick = {
                     coroutine.launch {
                         viewModelTask.deleteByIdTask(idTask)

@@ -38,6 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -78,10 +79,10 @@ fun AimsAndObjectibesPage(
         drawerState = drawerState,
         drawerContent = {
             ModalDrawerSheet {
-                Text("Navigation", modifier = Modifier.padding(16.dp))
+                Text(stringResource(R.string.drawer_navigation), modifier = Modifier.padding(16.dp))
                 HorizontalDivider()
                 NavigationDrawerItem(
-                    label = { Text("Управление привычками") },
+                    label = { Text(stringResource(R.string.menu_habits)) },
                     icon = {
                         Icon(
                             painter = painterResource(R.drawable.habit_ic),
@@ -93,7 +94,7 @@ fun AimsAndObjectibesPage(
                     onClick = { toMainPageClick() }
                 )
                 NavigationDrawerItem(
-                    label = { Text("Управление задачами") },
+                    label = { Text(stringResource(R.string.menu_tasks)) },
                     icon = {
                         Icon(
                             painter = painterResource(R.drawable.mission_ic),
@@ -111,7 +112,7 @@ fun AimsAndObjectibesPage(
                     }
                 )
                 NavigationDrawerItem(
-                    label = { Text("Уровень продуктивности") },
+                    label = { Text(stringResource(R.string.menu_productivity)) },
                     icon = {
                         Icon(
                             painter = painterResource(R.drawable.graphic_ic),
@@ -123,7 +124,7 @@ fun AimsAndObjectibesPage(
                     onClick = { toMainPageClick() }
                 )
                 NavigationDrawerItem(
-                    label = { Text("Настройки") },
+                    label = { Text(stringResource(R.string.menu_settings)) },
                     icon = {
                         Icon(
                             Icons.Default.Settings,
@@ -151,7 +152,7 @@ fun AimsAndObjectibesPage(
                 IconButton(onClick = {
                     scope.launch { drawerState.open() }
                 }) {
-                    Icon(Icons.Filled.Menu, "Меню")
+                    Icon(Icons.Filled.Menu, stringResource(R.string.cd_menu))
                 }
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -160,7 +161,7 @@ fun AimsAndObjectibesPage(
 
 //                    Text("Цели", fontWeight = FontWeight.Bold, fontSize = 20.sp)
                     Text(
-                        "Задачи",
+                        stringResource(R.string.screen_tasks),
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp,
                         modifier = Modifier.padding(start = 10.dp),
@@ -250,7 +251,7 @@ fun AimsAndObjectibesPage(
                 onClick = toAddAimsPageClick,
                 containerColor = GreenPrimary
             ) {
-                Icon(Icons.Filled.Add, contentDescription = "Добавить")
+                Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.cd_add))
             }
         }
     }

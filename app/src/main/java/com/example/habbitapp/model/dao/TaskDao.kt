@@ -24,6 +24,12 @@ interface TaskDao {
     @Query("SELECT * FROM task ORDER BY id DESC")
     fun getAllTask(): Flow<List<Task>>
 
+    @Query("SELECT COUNT(*) FROM task ")
+   suspend fun getAllTaskCount(): Int
+
+    @Query("SELECT (COUNT(CASE WHEN completionDates = :date THEN 1 END) * 100 / :count) FROM task")
+    fun getIndicator(date: String,count:Int): Int
+
     @Query("SELECT * FROM task WHERE id = :id")
     suspend fun getTaskById(id: Int): Task?
 

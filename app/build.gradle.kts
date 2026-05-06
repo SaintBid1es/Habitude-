@@ -57,7 +57,8 @@ dependencies {
     implementation("androidx.room:room-runtime:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
     implementation(libs.androidx.work.runtime.ktx)
-    implementation(libs.transport.runtime) // Kotlin
+    implementation(libs.transport.runtime)
+    implementation(libs.androidx.appcompat) // Kotlin
     // KSP
     ksp("androidx.room:room-compiler:2.6.1")
 
@@ -68,6 +69,7 @@ dependencies {
     implementation("androidx.hilt:hilt-work:1.2.0")
 
     implementation(libs.androidx.core.ktx)
+    implementation("androidx.appcompat:appcompat:1.7.0")
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))

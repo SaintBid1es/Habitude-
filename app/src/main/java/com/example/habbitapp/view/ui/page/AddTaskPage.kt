@@ -56,6 +56,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -65,6 +66,7 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.habbitapp.FilterChip
+import com.example.habbitapp.R
 import com.example.habbitapp.model.entity.Reminder
 import com.example.habbitapp.model.entity.Task
 import com.example.habbitapp.model.utils.setTimeNotification
@@ -149,7 +151,7 @@ fun AddTaskPage(toMainPageClick: ()-> Unit) {
             IconButton(onClick = toMainPageClick) {
                 Icon(Icons.Filled.Close, contentDescription = "")
             }
-            Text("Save", modifier = Modifier.clickable{
+            Text(stringResource(R.string.action_save), modifier = Modifier.clickable{
                 scope.launch {
 
 
@@ -237,7 +239,7 @@ fun AddTaskPage(toMainPageClick: ()-> Unit) {
             TextField(
                 value = text,
                 onValueChange = { text = it },
-                label = { Text("Habit Name") },
+                label = { Text(stringResource(R.string.label_habit_name)) },
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = Color.Transparent,
                     unfocusedContainerColor = Color.Transparent,
@@ -248,7 +250,7 @@ fun AddTaskPage(toMainPageClick: ()-> Unit) {
             TextField(
                 value = description,
                 onValueChange = { description = it },
-                label = { Text("Add description") },
+                label = { Text(stringResource(R.string.label_add_description)) },
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = Color.Transparent,
                     unfocusedContainerColor = Color.Transparent,
@@ -268,30 +270,30 @@ fun AddTaskPage(toMainPageClick: ()-> Unit) {
              color ->
                 selectedBackgroundColor = color
         })
-        Text("Repeat", modifier = Modifier.padding(10.dp), fontWeight = FontWeight.Bold)
+        Text(stringResource(R.string.label_repeat), modifier = Modifier.padding(10.dp), fontWeight = FontWeight.Bold)
         Row(modifier = Modifier
             .fillMaxWidth()
             .padding(10.dp), horizontalArrangement = Arrangement.spacedBy(60.dp)) {
-            FilterChip("Daily",selectedFilterRepeat==1,{selectedFilterRepeat=1})
-            FilterChip("Weekly",selectedFilterRepeat==2,{selectedFilterRepeat=2})
-            FilterChip("Monthly",selectedFilterRepeat==3,{selectedFilterRepeat=3})
+            FilterChip(stringResource(R.string.filter_daily),selectedFilterRepeat==1,{selectedFilterRepeat=1})
+            FilterChip(stringResource(R.string.filter_weekly),selectedFilterRepeat==2,{selectedFilterRepeat=2})
+            FilterChip(stringResource(R.string.filter_monthly),selectedFilterRepeat==3,{selectedFilterRepeat=3})
         }
-        Text("On these days", modifier = Modifier.padding(10.dp), fontWeight = FontWeight.Bold)
+        Text(stringResource(R.string.label_days), modifier = Modifier.padding(10.dp), fontWeight = FontWeight.Bold)
         Row(modifier = Modifier
             .fillMaxWidth()
             .padding(10.dp), horizontalArrangement = Arrangement.spacedBy(2.dp)) {
-            FilterChipDays("Mon",selectedFilterMonday, { selectedFilterMonday=!selectedFilterMonday })
-            FilterChipDays("Tue",selectedFilterTue, { selectedFilterTue=!selectedFilterTue })
-            FilterChipDays("Wed",selectedFilterWed, { selectedFilterWed=!selectedFilterWed })
-            FilterChipDays("Thu",selectedFilterThu, { selectedFilterThu=!selectedFilterThu })
-            FilterChipDays("Fri",selectedFilterFri, { selectedFilterFri=!selectedFilterFri })
-            FilterChipDays("Sat",selectedFilterSat, { selectedFilterSat=!selectedFilterSat })
-            FilterChipDays("Sun",selectedFilterSun, { selectedFilterSun=!selectedFilterSun })
+            FilterChipDays(stringResource(R.string.day_mon),selectedFilterMonday, { selectedFilterMonday=!selectedFilterMonday })
+            FilterChipDays(stringResource(R.string.day_tue),selectedFilterTue, { selectedFilterTue=!selectedFilterTue })
+            FilterChipDays(stringResource(R.string.day_wed),selectedFilterWed, { selectedFilterWed=!selectedFilterWed })
+            FilterChipDays(stringResource(R.string.day_thu),selectedFilterThu, { selectedFilterThu=!selectedFilterThu })
+            FilterChipDays(stringResource(R.string.day_fri),selectedFilterFri, { selectedFilterFri=!selectedFilterFri })
+            FilterChipDays(stringResource(R.string.day_sat),selectedFilterSat, { selectedFilterSat=!selectedFilterSat })
+            FilterChipDays(stringResource(R.string.day_sun),selectedFilterSun, { selectedFilterSun=!selectedFilterSun })
         }
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Absolute.SpaceBetween, modifier = Modifier
             .fillMaxWidth()
             .padding(15.dp)) {
-            Text("Reminder", fontWeight = FontWeight.Bold)
+            Text(stringResource(R.string.label_reminder), fontWeight = FontWeight.Bold)
             if (checkedState.value){
                 TimePickerWithDialog(onTimeSelected = { selectedHour, selectedMinute ->
                     hour = selectedHour
@@ -407,7 +409,7 @@ fun TimePickerWithDialog(
                         modifier = Modifier.padding(20.dp)
                     ) {
                         Text(
-                            text = "Выберите время",
+                            text = stringResource(R.string.time_picker_title),
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color.White,
@@ -433,7 +435,7 @@ fun TimePickerWithDialog(
                                     contentColor = Color.Gray
                                 )
                             ) {
-                                Text("Отмена")
+                                Text(stringResource(R.string.action_cancel))
                             }
 
                             Spacer(modifier = Modifier.width(8.dp))
@@ -451,7 +453,7 @@ fun TimePickerWithDialog(
                                 ),
                                 shape = RoundedCornerShape(12.dp)
                             ) {
-                                Text("Сохранить")
+                                Text(stringResource(R.string.action_save))
                             }
                         }
                     }
@@ -487,7 +489,7 @@ fun FullScreenDialog(onDismissRequest: () -> Unit, onIconSelected: (String) -> U
                     Text(text = "🎨", fontSize = 32.sp)
                     Spacer(modifier = Modifier.width(12.dp))
                     Text(
-                        text = "Choose Your Icon",
+                        text = stringResource(R.string.icon_dialog_title),
                         style = MaterialTheme.typography.headlineMedium,
                         color = Color.White,
                         fontWeight = FontWeight.Bold
@@ -497,7 +499,7 @@ fun FullScreenDialog(onDismissRequest: () -> Unit, onIconSelected: (String) -> U
                 Spacer(modifier = Modifier.height(8.dp))
 
 
-                CategoryHeader(emoji = "🏃‍♂️", title = "Sports & Activity")
+                CategoryHeader(emoji = "🏃‍♂️", title = stringResource(R.string.icon_cat_sports))
                 LazyRow(
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
                     modifier = Modifier.padding(vertical = 12.dp)
@@ -510,7 +512,7 @@ fun FullScreenDialog(onDismissRequest: () -> Unit, onIconSelected: (String) -> U
                     }
                 }
 
-                CategoryHeader(emoji = "🥗", title = "Food & Health")
+                CategoryHeader(emoji = "🥗", title = stringResource(R.string.icon_cat_food))
                 LazyRow(
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
                     modifier = Modifier.padding(vertical = 12.dp)
@@ -523,7 +525,7 @@ fun FullScreenDialog(onDismissRequest: () -> Unit, onIconSelected: (String) -> U
                     }
                 }
 
-                CategoryHeader(emoji = "📚", title = "Work & Study")
+                CategoryHeader(emoji = "📚", title = stringResource(R.string.icon_cat_work))
                 LazyRow(
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
                     modifier = Modifier.padding(vertical = 12.dp)
@@ -536,7 +538,7 @@ fun FullScreenDialog(onDismissRequest: () -> Unit, onIconSelected: (String) -> U
                     }
                 }
 
-                CategoryHeader(emoji = "🏠", title = "Home & Self Care")
+                CategoryHeader(emoji = "🏠", title = stringResource(R.string.icon_cat_home))
                 LazyRow(
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
                     modifier = Modifier.padding(vertical = 12.dp)
@@ -549,7 +551,7 @@ fun FullScreenDialog(onDismissRequest: () -> Unit, onIconSelected: (String) -> U
                     }
                 }
 
-                CategoryHeader(emoji = "💰", title = "Finance & Goals")
+                CategoryHeader(emoji = "💰", title = stringResource(R.string.icon_cat_finance))
                 LazyRow(
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
                     modifier = Modifier.padding(vertical = 12.dp)
@@ -561,7 +563,7 @@ fun FullScreenDialog(onDismissRequest: () -> Unit, onIconSelected: (String) -> U
                         IconCircle(emoji = emoji, onClick = { onIconSelected(emoji) })
                     }
                 }
-                CategoryHeader(emoji = "✈️", title = "Travel & Adventure")
+                CategoryHeader(emoji = "✈️", title = stringResource(R.string.icon_cat_travel))
                 LazyRow(horizontalArrangement = Arrangement.spacedBy(16.dp),
                     modifier = Modifier.padding(vertical = 12.dp)) {
                 items(listOf(
@@ -572,7 +574,7 @@ fun FullScreenDialog(onDismissRequest: () -> Unit, onIconSelected: (String) -> U
                 }
             }
 
-                CategoryHeader(emoji = "🎨", title = "Creativity")
+                CategoryHeader(emoji = "🎨", title = stringResource(R.string.icon_cat_creativity))
                 LazyRow(horizontalArrangement = Arrangement.spacedBy(16.dp),
                     modifier = Modifier.padding(vertical = 12.dp)) {
                 items(listOf(
@@ -583,7 +585,7 @@ fun FullScreenDialog(onDismissRequest: () -> Unit, onIconSelected: (String) -> U
                 }
             }
 
-                CategoryHeader(emoji = "📱", title = "Technology")
+                CategoryHeader(emoji = "📱", title = stringResource(R.string.icon_cat_tech))
                 LazyRow(horizontalArrangement = Arrangement.spacedBy(16.dp),
                     modifier = Modifier.padding(vertical = 12.dp)) {
                 items(listOf(
@@ -594,7 +596,7 @@ fun FullScreenDialog(onDismissRequest: () -> Unit, onIconSelected: (String) -> U
                 }
             }
 
-                CategoryHeader(emoji = "😊", title = "Mood & Emotions")
+                CategoryHeader(emoji = "😊", title = stringResource(R.string.icon_cat_mood))
                 LazyRow(
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
                     modifier = Modifier.padding(vertical = 12.dp)
@@ -618,7 +620,7 @@ fun FullScreenDialog(onDismissRequest: () -> Unit, onIconSelected: (String) -> U
                     ),
                     shape = RoundedCornerShape(12.dp)
                 ) {
-                    Text("Close", fontSize = 16.sp)
+                    Text(stringResource(R.string.action_close), fontSize = 16.sp)
                 }
             }
         }
