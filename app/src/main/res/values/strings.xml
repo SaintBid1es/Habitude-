@@ -64,4 +64,5 @@
     <string name="cd_undo">Undo</string>
     <string name="cd_complete">Complete</string>
     <string name="cd_selected">Selected</string>
+    <string name="settings">Settings</string>
 </resources>

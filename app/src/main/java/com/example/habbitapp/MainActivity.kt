@@ -6,6 +6,7 @@ import androidx.core.os.LocaleListCompat
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -60,7 +61,7 @@ import com.example.habbitapp.viewmodel.TaskViewModel
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -136,14 +137,6 @@ fun MainPage(toAddTaskPageClick: ()-> Unit,onTaskClick: (Int) -> Unit,
                 IconButton(onClick = {
                     scope.launch {drawerState.open()} }) {
                     Icon(Icons.Filled.Menu, stringResource(R.string.cd_menu))
-                }
-                IconButton(onClick = {
-                    val currentLanguage = AppCompatDelegate.getApplicationLocales()[0]?.language ?: "en"
-                    val nextLanguage = if (currentLanguage == "ru") "en" else "ru"
-                    AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(nextLanguage))
-                }
-                ) {
-                    Icon(painterResource(R.drawable.language_ic), stringResource(R.string.cd_menu))
                 }
                 Row(
                     modifier = Modifier.fillMaxWidth(),

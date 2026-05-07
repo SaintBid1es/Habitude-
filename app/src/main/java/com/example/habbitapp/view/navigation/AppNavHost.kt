@@ -43,11 +43,7 @@ fun AppNavHost(
             ) 
         }
 
-        composable(route = Destination.Second.route) {
-            SettingsPage(toMainPageClick = {
-                navController.popBackStack()
-            })
-        }
+
         composable(route = Destination.AimsAndObjectives.route) {
             AimsAndObjectibesPage(
                 toMainPageClick = {
@@ -64,12 +60,7 @@ fun AppNavHost(
         }
         composable(route = Destination.Productivity.route) {
             LevelProductivityPage(
-                toAddTaskPageClick = {
-                    navController.navigate(Destination.AddTask.route)
-                },
-                onTaskClick = { taskId ->
-                    navController.navigate(Destination.EditTask.passId(taskId))
-                }, toAimsAndObjectivesPageClick = {
+                toAimsAndObjectivesPageClick = {
                     navController.navigate(Destination.AimsAndObjectives.route)
                 },
                 toSettingsPage = {
@@ -81,9 +72,18 @@ fun AppNavHost(
             )
         }
         composable(route = Destination.Settings.route) {
-            SettingsPage {
+            SettingsPage(
+               toAimsAndObjectivesPageClick = {
+                    navController.navigate(Destination.AimsAndObjectives.route)
+                },
+                toProductivityPage = {
+                    navController.navigate(Destination.Productivity.route)
+                },
+                toMainPageClick = {
+                    navController.navigate(Destination.First.route)
+                }
+            )
 
-            }
         }
         composable(route = Destination.AddTask.route) {
             AddTaskPage(

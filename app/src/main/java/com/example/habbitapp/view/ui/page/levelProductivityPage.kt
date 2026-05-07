@@ -52,7 +52,7 @@ import kotlinx.datetime.LocalDate
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
-fun LevelProductivityPage( modifier: Modifier = Modifier,toAddTaskPageClick: ()-> Unit,onTaskClick: (Int) -> Unit,
+fun LevelProductivityPage(
                            toAimsAndObjectivesPageClick: ()-> Unit,toSettingsPage: ()-> Unit,toMainPage: ()-> Unit){
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -132,7 +132,7 @@ fun LevelProductivityPage( modifier: Modifier = Modifier,toAddTaskPageClick: ()-
                 
 
             }
-            Box(modifier.fillMaxWidth(), contentAlignment = Alignment.Center){
+            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center){
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     CustomComponent(indicatorValue = indicatorValue)
                     Text("Уровень продуктивности", fontWeight = FontWeight.Bold, fontSize = 17.sp)
@@ -146,8 +146,6 @@ fun LevelProductivityPage( modifier: Modifier = Modifier,toAddTaskPageClick: ()-
 @Preview(showBackground = true)
 fun LevelProductivityPagePreview(){
     LevelProductivityPage(
-        toAddTaskPageClick = {},
-        onTaskClick = {},
         toAimsAndObjectivesPageClick = {},
         toSettingsPage = {},
         toMainPage = {}
