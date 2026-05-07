@@ -67,6 +67,14 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.0.3")
     // hilt
     implementation("androidx.hilt:hilt-work:1.2.0")
+    // DataStore
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")
+
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.0")
 
     implementation(libs.androidx.core.ktx)
     implementation("androidx.appcompat:appcompat:1.7.0")

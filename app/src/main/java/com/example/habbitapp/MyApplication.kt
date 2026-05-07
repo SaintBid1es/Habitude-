@@ -32,8 +32,6 @@ class MyApplication : Application(), Configuration.Provider {
         super.onCreate()
         appContext = applicationContext
 
-        // Запускаем инициализацию WorkManager после того, как Hilt завершит инъекцию
-        // Используем postDelayed, чтобы дать Hilt время на внедрение зависимостей
         android.os.Handler(android.os.Looper.getMainLooper()).post {
             setupDailyMigration()
         }
@@ -41,9 +39,8 @@ class MyApplication : Application(), Configuration.Provider {
     //TODO В ДОКУМЕНТАЦИЮ ИЗМЕНИТЬ ЖТОТ ФАЙЛ
 
     private fun setupDailyMigration() {
-        // Проверяем, инициализирован ли workerFactory
+
         if (!::workerFactory.isInitialized) {
-            // Если ещё нет, ждём ещё немного
             android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
                 setupDailyMigration()
             }, 100)

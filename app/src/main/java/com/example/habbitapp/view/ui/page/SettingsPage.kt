@@ -24,6 +24,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -44,6 +45,7 @@ import androidx.compose.ui.unit.sp
 import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.habbitapp.R
+import com.example.habbitapp.model.utils.SettingsManager
 
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
@@ -55,8 +57,11 @@ fun SettingsPage(
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val checkedStateLanguage = rememberSaveable { mutableStateOf(AppCompatDelegate.getApplicationLocales().toLanguageTags() == "ru") }
-    val checkedStateTheme = remember { mutableStateOf(false) }
-    ModalNavigationDrawer(
+
+    val context = LocalContext.current
+    val settingsManager = remember { SettingsManager(context.applicationContext) }
+    val isDarkMode by settingsManager.isDarkMode.collectAsState(initial = false)
+        ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
             ModalDrawerSheet {
@@ -176,8 +181,16 @@ fun SettingsPage(
                 .padding(15.dp)) {
                 Text(text = ("Theme(Light/Dark)"), fontWeight = FontWeight.Bold)
                 Switch(
-                    checked = checkedStateTheme.value,
-                    onCheckedChange = { checkedStateTheme.value = it }
+                    checked = isDarkMode,
+                    onCheckedChange = { checked ->
+                        scope.launch {
+                            settingsManager.saveDarkMode(checked)
+                            AppCompatDelegate.setDefaultNightMode(
+                                if (checked) AppCompatDelegate.MODE_NIGHT_YES
+                                else AppCompatDelegate.MODE_NIGHT_NO
+                            )
+                        }
+                    }
                 )
             }
         }

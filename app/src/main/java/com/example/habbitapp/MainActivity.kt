@@ -52,12 +52,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
+import com.example.habbitapp.model.utils.SettingsManager
 import com.example.habbitapp.view.navigation.AppNavHost
 import com.example.habbitapp.view.ui.card.TaskCard
 import com.example.habbitapp.view.ui.theme.HabbitAppTheme
 import com.example.habbitapp.viewmodel.TaskViewModel
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
@@ -65,6 +68,14 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        val settingsManager = SettingsManager(this)
+        lifecycleScope.launch {
+            settingsManager.isDarkMode.first().let { isDark ->
+                AppCompatDelegate.setDefaultNightMode(
+                    if (isDark) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+                )
+            }
+        }
         setContent {
             HabbitAppTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
