@@ -12,17 +12,11 @@ import kotlinx.coroutines.flow.map
 
 private val Context.dataStore by preferencesDataStore(name = "settings")
 class SettingsManager(private val context: Context) {
-
     companion object {
         val DARK_MODE_KEY = booleanPreferencesKey("dark_mode")
     }
-
-
     val isDarkMode: Flow<Boolean> = context.dataStore.data.map { it[DARK_MODE_KEY] ?: false }
-
     suspend fun saveDarkMode(enabled: Boolean) {
         context.dataStore.edit { it[DARK_MODE_KEY] = enabled }
     }
-
-
 }

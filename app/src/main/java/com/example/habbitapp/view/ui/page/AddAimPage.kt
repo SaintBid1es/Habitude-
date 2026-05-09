@@ -149,31 +149,7 @@ fun AddAimPage(toAimsPageClick: () -> Unit) {
                     errorContainerColor = Color.Transparent,
                 )
             )
-//            Row(horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
-//                TextField(
-//                    value = description,
-//                    onValueChange = { description = it },
-//                    label = { Text("subtask") },
-//                    colors = TextFieldDefaults.colors(
-//                        focusedContainerColor = Color.Transparent,
-//                        unfocusedContainerColor = Color.Transparent,
-//                        disabledContainerColor = Color.Transparent,
-//                        errorContainerColor = Color.Transparent,
-//                    ),
-//                    modifier = Modifier.width(200.dp), singleLine = true, maxLines = 1
-//
-//                )
-//                IconButton(onClick = {
-//
-//                    }
-//
-//                ) {
-//                    Icon(
-//                        Icons.Filled.Add,
-//                        contentDescription = "",
-//                    )
-//                }
-//            }
+
 
         }
         Spacer(modifier = Modifier.padding(top = 10.dp))

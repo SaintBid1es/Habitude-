@@ -52,9 +52,14 @@ fun AppNavHost(
                 toAddAimsPageClick = {
                     navController.navigate(Destination.AddAim.route)
                 },
-                onAimsClick = {
-                        aimId->
+                onAimsClick = { aimId ->
                     navController.navigate(Destination.EditAim.passId(aimId))
+                },
+                toSettingsPageClick = {
+                    navController.navigate(Destination.Settings.route)
+                },
+                toProductivityPageClick = {
+                    navController.navigate(Destination.Productivity.route)
                 }
             )
         }

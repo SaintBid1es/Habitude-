@@ -1,5 +1,6 @@
 package com.example.habbitapp.view.ui.page
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.clickable
@@ -51,6 +52,7 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
 import java.util.Locale
 
+@SuppressLint("SuspiciousIndentation")
 @Composable
 fun SettingsPage(
                  toAimsAndObjectivesPageClick: ()-> Unit,toProductivityPage: ()-> Unit,toMainPageClick: ()-> Unit) {
@@ -168,8 +170,6 @@ fun SettingsPage(
                     onCheckedChange = {   isChecked ->
                         checkedStateLanguage.value = isChecked
                         val lang = if (isChecked) "ru" else "en"
-
-
                         val appLocale: LocaleListCompat = LocaleListCompat.forLanguageTags(lang)
                         AppCompatDelegate.setApplicationLocales(appLocale)
                     }

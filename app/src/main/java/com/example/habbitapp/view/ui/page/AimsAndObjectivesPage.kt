@@ -1,5 +1,6 @@
 package com.example.habbitapp.view.ui.page
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,11 +12,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
@@ -36,6 +40,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -49,12 +55,14 @@ import com.example.habbitapp.FilterChip
 import com.example.habbitapp.R
 import com.example.habbitapp.view.ui.card.AimCard
 import com.example.habbitapp.view.ui.card.TaskCard
+import com.example.habbitapp.view.ui.customElement.RowKalendarMy
 import com.example.habbitapp.view.ui.theme.GrayLight
 import com.example.habbitapp.view.ui.theme.GrayText
 import com.example.habbitapp.view.ui.theme.GreenLight
 import com.example.habbitapp.view.ui.theme.GreenPrimary
 import com.example.habbitapp.view.ui.theme.White
 import com.example.habbitapp.viewmodel.AimViewModel
+import com.example.habbitapp.viewmodel.RowKalendarMyViewModel
 import com.example.habbitapp.viewmodel.TaskViewModel
 import kotlinx.coroutines.launch
 import io.github.chouaibmo.rowkalendar.RowKalendar
@@ -65,8 +73,9 @@ import kotlinx.datetime.LocalDate
 
 @Composable
 fun AimsAndObjectibesPage(
-    modifier: Modifier = Modifier,
     toMainPageClick: () -> Unit,
+    toSettingsPageClick: () -> Unit,
+    toProductivityPageClick: () -> Unit,
     toAddAimsPageClick: () -> Unit,
     onAimsClick: (Int) -> Unit,
 ) {
@@ -75,6 +84,12 @@ fun AimsAndObjectibesPage(
     val tasks by viewModel.aim.collectAsStateWithLifecycle()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
+    val viewModelUI: RowKalendarMyViewModel = viewModel { RowKalendarMyViewModel() }
+    val uiState = viewModelUI.uiState.value
+    val listState  = rememberLazyListState(
+        initialFirstVisibleItemIndex = (uiState.dates.size / 2) - 1,
+        initialFirstVisibleItemScrollOffset = -10
+    )
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
@@ -121,7 +136,7 @@ fun AimsAndObjectibesPage(
                         )
                     },
                     selected = false,
-                    onClick = { toMainPageClick() }
+                    onClick = { toProductivityPageClick() }
                 )
                 NavigationDrawerItem(
                     label = { Text(stringResource(R.string.menu_settings)) },
@@ -133,7 +148,7 @@ fun AimsAndObjectibesPage(
                         )
                     },
                     selected = false,
-                    onClick = { toMainPageClick() }
+                    onClick = { toSettingsPageClick() }
                 )
 
             }
@@ -156,7 +171,8 @@ fun AimsAndObjectibesPage(
                 }
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
+                    horizontalArrangement = Arrangement.SpaceAround,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
 
 //                    Text("Цели", fontWeight = FontWeight.Bold, fontSize = 20.sp)
@@ -167,11 +183,31 @@ fun AimsAndObjectibesPage(
                         modifier = Modifier.padding(start = 10.dp),
                         color = Color.Green
                     )
+                    Button(onClick = {
+                        scope.launch {
+                            val date = LocalDate.now()
+                            selectedDate = date
+                            //todo БИНАРНЫМ ПОИСКОМ НАЙТИ ДАТУ
+                            listState.animateScrollToItem(0)
+                        }
+                    }, modifier = Modifier.padding(5.dp),
+                        colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Black,
+                        contentColor = Color.White
+                    )) {
+                        Text(
+                            text = "Today",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 15.sp,
+                            )
+                    }
                 }
+
             }
 
-            RowKalendar(
+            RowKalendarMy(
                 modifier = Modifier.fillMaxWidth(),
+                scrollState = listState,
                 content = { date, isSelected, onClick ->
                     DateCell(
                         date = date,
@@ -265,7 +301,9 @@ fun AimsAndObjectibesPagePreview() {
 
         toMainPageClick = {},
         toAddAimsPageClick = {},
-        onAimsClick = {}
+        onAimsClick = {},
+        toSettingsPageClick = {},
+        toProductivityPageClick = {}
     )
 }
 
