@@ -3,13 +3,22 @@ package com.example.habbitapp
 import android.app.Application
 import android.content.Context
 import androidx.hilt.work.HiltWorkerFactory
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.work.Configuration
 import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.example.habbitapp.model.utils.TaskMigrationWorker
+import com.example.habbitapp.viewmodel.AimViewModel
 import dagger.hilt.android.HiltAndroidApp
+import io.github.chouaibmo.rowkalendar.extensions.now
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDate
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -19,7 +28,7 @@ class MyApplication : Application(), Configuration.Provider {
         lateinit var appContext: Context
             private set
     }
-
+    private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     @Inject
     lateinit var workerFactory: HiltWorkerFactory
 
@@ -35,6 +44,11 @@ class MyApplication : Application(), Configuration.Provider {
         android.os.Handler(android.os.Looper.getMainLooper()).post {
             setupDailyMigration()
         }
+
+        applicationScope.launch {
+            changeTransferAims()
+        }
+
     }
     //TODO В ДОКУМЕНТАЦИЮ ИЗМЕНИТЬ ЖТОТ ФАЙЛ
 
@@ -63,6 +77,15 @@ class MyApplication : Application(), Configuration.Provider {
             )
         } catch (e: Exception) {
             e.printStackTrace()
+        }
+    }
+    suspend fun changeTransferAims(){
+        val viewModelAims : AimViewModel = AimViewModel()
+        val date = LocalDate.now()
+        coroutineScope {
+            launch {
+                viewModelAims.migrateUnfinishedTasks(date.toString())
+            }
         }
     }
 }
