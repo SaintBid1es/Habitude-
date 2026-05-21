@@ -47,18 +47,23 @@ class Converters {
     }
 
     @TypeConverter
-    fun toMapStringBoolean(data: String): MutableMap <String, Boolean> {
-        if (data.isEmpty()) return emptyMap()
+    fun fromMapStringBoolean(map: HashMap<String, Boolean>?): String {
+        if (map.isNullOrEmpty()) return ""
+        return map.entries.joinToString(separator = ";") { (k, v) ->
+            "$k:${if (v) "1" else "0"}"
+        }
+    }
 
-        return data.split(";")
-            .mapNotNull { pair ->
-                val parts = pair.split(":")
-                if (parts.size == 2) {
-                    val key = parts[0]
-                    val value = parts[1] == "1"
-                    key to value
-                } else null
+    @TypeConverter
+    fun toMapStringBoolean(data: String): HashMap<String, Boolean>? {
+        if (data.isEmpty()) return null
+        val result = HashMap<String, Boolean>()
+        data.split(";").forEach { pair ->
+            val parts = pair.split(":")
+            if (parts.size == 2) {
+                result[parts[0]] = parts[1] == "1"
             }
-            .toMutableStateMap()
+        }
+        return result
     }
 }

@@ -64,7 +64,7 @@ dependencies {
 
     // row calendar
     implementation("io.github.chouaibmo:rowkalendar:0.0.3")
-    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.0.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.1")
     // hilt
     implementation("androidx.hilt:hilt-work:1.2.0")
     // DataStore
