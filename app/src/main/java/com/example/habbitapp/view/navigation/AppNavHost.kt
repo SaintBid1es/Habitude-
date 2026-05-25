@@ -110,9 +110,7 @@ fun AppNavHost(
                 navArgument("taskId") { type = NavType.IntType }
             )
         ) { backStackEntry ->
-
             val taskId = backStackEntry.arguments?.getInt("taskId") ?: 0
-
             UpdateTaskPage(
                 idTask = taskId,
                 toMainPageClick = {

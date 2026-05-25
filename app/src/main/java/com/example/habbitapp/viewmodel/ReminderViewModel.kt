@@ -9,21 +9,22 @@ import androidx.lifecycle.viewModelScope
 import com.example.habbitapp.model.database.ItemDatabase
 import com.example.habbitapp.MyApplication
 import com.example.habbitapp.model.entity.Reminder
+import com.example.habbitapp.model.repository.AimRepository
+import com.example.habbitapp.model.repository.AimRepositoryImpl
+import com.example.habbitapp.model.repository.ReminderImpl
+import com.example.habbitapp.model.repository.ReminderRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlin.getValue
 
-class ReminderViewModel() : ViewModel() {
+class ReminderViewModel(
+    private val repository: ReminderRepository = reminderRepository()
+) : ViewModel() {
     private val dao by lazy {
         ItemDatabase.getInstance(MyApplication.appContext).reminderDao()
     }
-    companion object{
-         const val NOTIFICATION_PERMISSION_REQUEST_CODE = 1001
-         const val NOTIFICATION_ID = 1
-    }
-
     private val _reminder = MutableStateFlow<List<Reminder>>(emptyList())
     val reminder: StateFlow<List<Reminder>> = _reminder
 
@@ -37,11 +38,11 @@ class ReminderViewModel() : ViewModel() {
     }
 
     fun insertReminder(reminder: Reminder) = viewModelScope.launch {
-        dao.insert(reminder)
+        repository.insertReminder(reminder)
     }
 
     fun updateReminder(reminder: Reminder) = viewModelScope.launch {
-        dao.update(reminder)
+        repository.updateReminder(reminder)
     }
 
     fun deleteReminder(reminder: Reminder) = viewModelScope.launch {
@@ -49,20 +50,16 @@ class ReminderViewModel() : ViewModel() {
     }
 
     suspend fun findByIdReminderTask(id: Int): Reminder? {
-        return dao.getReminderByIdTask(id)
+        return repository.findByIdReminderTask(id)
     }
     suspend fun deleteByIdReminder(id: Int) {
         return dao.deleteReminderById(id)
     }
 
-     fun requestNotificationPermission(activity: Activity) {
-        // Для Android 13+ (API 33+)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            ActivityCompat.requestPermissions(
-                activity,
-                arrayOf(Manifest.permission.POST_NOTIFICATIONS),
-                NOTIFICATION_PERMISSION_REQUEST_CODE
-            )
+    companion object {
+        private fun reminderRepository(): ReminderRepository {
+            val dao = ItemDatabase.getInstance(MyApplication.appContext).reminderDao()
+            return ReminderImpl(dao)
         }
     }
 

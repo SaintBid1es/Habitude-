@@ -7,7 +7,6 @@ sealed class Destination(val route: String) {
     data object Productivity : Destination(PRODUCTIVITY)
     data object Settings : Destination(SETTINGS)
 
-    data object Second : Destination(ROUTE_SECOND)
     data object AddTask : Destination(ADD_TASK)
     data object AddAim : Destination(ADD_AIM)
     data object EditTask : Destination("route_editTask/{taskId}") {
@@ -21,7 +20,6 @@ sealed class Destination(val route: String) {
         private const val ROUTE_FIRST = "route_first"
         private const val SETTINGS = "route_settings"
         private const val ADD_AIM = "route_addAim"
-        private const val ROUTE_SECOND = "route_second"
         private const val ADD_TASK = "route_addTask"
         private const val PRODUCTIVITY = "route_productivity"
         private const val EDIT_TASK = "route_editTask"

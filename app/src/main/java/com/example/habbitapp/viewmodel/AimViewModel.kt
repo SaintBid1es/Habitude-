@@ -5,13 +5,19 @@ import androidx.lifecycle.viewModelScope
 import com.example.habbitapp.model.database.ItemDatabase
 import com.example.habbitapp.MyApplication
 import com.example.habbitapp.model.entity.Aims
+import com.example.habbitapp.model.repository.AimRepository
+import com.example.habbitapp.model.repository.AimRepositoryImpl
+import com.example.habbitapp.model.repository.TaskRepository
+import com.example.habbitapp.model.repository.TaskRepositoryImpl
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
 
-class AimViewModel : ViewModel() {
+class AimViewModel(
+    private val repository: AimRepository = aimRepository()
+) : ViewModel() {
     private val dao by lazy {
         ItemDatabase.getInstance(MyApplication.appContext).aimsDao()
     }
@@ -28,45 +34,31 @@ class AimViewModel : ViewModel() {
         }
     }
     fun binarySearchIndexDate(list: List<LocalDate>,date:LocalDate): Int {
-        var low = 0
-        var high  = list.size - 1
-        var mid:Int = 0
-        while (low<=high){
-            mid = (low+high) / 2
-            var guess = list[mid]
-            if (guess == date) return mid
-            else if (guess>date){
-                high = mid-1
-            }
-            else {
-                low = mid+1
-            }
-        }
-
-        return mid
+      return  repository.binarySearchIndexDate(list,date)
     }
     fun insertAim(aim: Aims) = viewModelScope.launch {
-        dao.insert(aim)
+       repository.insertAim(aim)
     }
 
     fun updateAim(aim: Aims) = viewModelScope.launch {
-        dao.update(aim)
-    }
-
-    fun deleteAim(aim: Aims) = viewModelScope.launch {
-        dao.delete(aim)
+       repository.updateAim(aim)
     }
 
     suspend fun findByIdAim(id: Int): Aims {
-        return dao.getAimById(id)
+        return repository.findByIdAim(id)
     }
     suspend fun deleteByIdAims(id: Int) {
-        return dao.deleteAimsById(id)
+        return repository.deleteByIdAims(id)
     }
-    suspend fun migrateUnfinishedTasks(today:String){
+     fun migrateUnfinishedTasks(today:String){
         viewModelScope.launch {
-            dao.migrateOldTasks(today)
+            repository.migrateUnfinishedTasks(today)
         }
     }
-
+    companion object {
+        private fun aimRepository(): AimRepository {
+            val dao = ItemDatabase.getInstance(MyApplication.appContext).aimsDao()
+            return AimRepositoryImpl(dao)
+        }
+    }
 }
