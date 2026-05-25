@@ -10,8 +10,13 @@ import java.time.temporal.ChronoUnit
 
 object StreakManager {
 
+    /** Подменяется в unit-тестах для фиксированной «сегодняшней» даты. */
+    internal var todayProvider: () -> LocalDate = { LocalDate.now() }
+
     @SuppressLint("NewApi")
     private val dateFormatter = DateTimeFormatter.ISO_LOCAL_DATE
+
+    private fun today(): LocalDate = todayProvider()
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun shouldCompleteOnDate(task: Task, date: LocalDate): Boolean {
@@ -27,7 +32,7 @@ object StreakManager {
 
     @SuppressLint("NewApi")
     fun onTaskCompleted(task: Task): Task {
-        val today = LocalDate.now()
+        val today = today()
         val todayString = today.format(dateFormatter)
 
         if (!shouldCompleteOnDate(task, today)) {
@@ -51,7 +56,7 @@ object StreakManager {
 
     @SuppressLint("NewApi")
     fun onTaskUncompleted(task: Task): Task {
-        val today = LocalDate.now()
+        val today = today()
         val todayString = today.format(dateFormatter)
 
         if (!task.completionDates.contains(todayString)) {
@@ -88,7 +93,7 @@ object StreakManager {
     private fun calculateDailyStreak(sortedDates: List<LocalDate>): Int {
         if (sortedDates.isEmpty()) return 0
 
-        val today = LocalDate.now()
+        val today = today()
         var streak = 0
         var expectedDate = today
 
@@ -124,7 +129,7 @@ object StreakManager {
     private fun calculateWeeklyStreak(task: Task, sortedDates: List<LocalDate>): Int {
         if (sortedDates.isEmpty()) return 0
 
-        val today = LocalDate.now()
+        val today = today()
         val completedDatesSet = sortedDates.toSet()
 
         var currentWorkingDay = findLastWorkingDay(task, today)
@@ -163,7 +168,7 @@ object StreakManager {
     private fun calculateMonthlyStreak(sortedDates: List<LocalDate>): Int {
         if (sortedDates.isEmpty()) return 0
 
-        val today = LocalDate.now()
+        val today = today()
         var streak = 0
         var expectedYearMonth = today.withDayOfMonth(1)
 
@@ -230,7 +235,7 @@ object StreakManager {
 
     @SuppressLint("NewApi")
     fun resetCheckExecForNewDay(task: Task): Task {
-        val today = LocalDate.now().format(dateFormatter)
+        val today = today().format(dateFormatter)
         return if (!task.completionDates.contains(today) && task.checkExec) {
             task.copy(checkExec = false)
         } else {

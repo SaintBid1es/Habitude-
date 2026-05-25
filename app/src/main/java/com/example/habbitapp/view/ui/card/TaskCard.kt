@@ -50,7 +50,7 @@ import com.example.habbitapp.R
 
 @SuppressLint("NewApi")
 @Composable
-fun TaskCard(task: Task, onUpdatePage: () -> Unit) {
+fun TaskCard(task: Task, onUpdatePage: () -> Unit, onTaskUpdate: (Task) -> Unit) {
     val context = LocalContext.current
 //    val mediaPlayerSuccess = remember {
 //        MediaPlayer.create(context, R.raw.notification)
@@ -58,17 +58,17 @@ fun TaskCard(task: Task, onUpdatePage: () -> Unit) {
 //    val mediaPlayerUnSuccess = remember {
 //        MediaPlayer.create(context, R.raw.otmena)
 //    }
-    val viewmodel: TaskViewModel = viewModel()
 
     val color by animateColorAsState(
-        targetValue = if (task.checkExec){ Color.Green}
-        else{
+        targetValue = if (task.checkExec) {
+            Color.Green
+        } else {
             Color.Gray
         }, animationSpec = tween(durationMillis = 700)
     )
     val size by animateSizeAsState(
-        targetValue = if (task.checkExec) Size(24f,24f) else Size(27f,27f)
-        , animationSpec = spring(
+        targetValue = if (task.checkExec) Size(24f, 24f) else Size(27f, 27f),
+        animationSpec = spring(
             dampingRatio = Spring.DampingRatioMediumBouncy,
             stiffness = Spring.StiffnessLow
         )
@@ -77,7 +77,7 @@ fun TaskCard(task: Task, onUpdatePage: () -> Unit) {
     LaunchedEffect(task.id) {
         val resetTask = StreakManager.resetCheckExecForNewDay(task)
         if (resetTask != task) {
-            viewmodel.updateTask(resetTask)
+            onTaskUpdate(resetTask)
         }
     }
     Card(
@@ -97,7 +97,7 @@ fun TaskCard(task: Task, onUpdatePage: () -> Unit) {
             Text(task.icon, modifier = Modifier.padding(10.dp))
             Column {
 
-                    Text(task.name)
+                Text(task.name)
                 Row {
                     Text("\uD83D\uDD25 ", fontSize = 10.sp)
                     AnimatedContent(
@@ -129,25 +129,24 @@ fun TaskCard(task: Task, onUpdatePage: () -> Unit) {
 //                        mediaPlayerUnSuccess.start()
                         StreakManager.onTaskUncompleted(task)
                     }
-                    viewmodel.updateTask(updatedTask)
+                    onTaskUpdate(updatedTask)
                 }) {
                     Icon(
                         Icons.Filled.CheckCircle,
-                        contentDescription = if (task.checkExec) stringResource(R.string.cd_undo) else stringResource(R.string.cd_complete),
+                        contentDescription = if (task.checkExec) stringResource(R.string.cd_undo) else stringResource(
+                            R.string.cd_complete
+                        ),
                         tint = color,
-                        modifier = Modifier.size(size.width.dp,size.height.dp)
+                        modifier = Modifier.size(size.width.dp, size.height.dp)
                     )
                 }
-                }
-
             }
 
         }
 
     }
 
-
-
+}
 
 
 @Composable
@@ -165,5 +164,5 @@ fun TaskPreview() {
         mutableListOf<Boolean>(false)
     )
 
-    TaskCard(task, {})
+    TaskCard(task, {},{})
 }

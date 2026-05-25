@@ -115,7 +115,6 @@ fun UpdateTaskPage(toMainPageClick: ()-> Unit,idTask: Int) {
         selectedFilterFri = task.days.get(4)
         selectedFilterSat = task.days.get(5)
         selectedFilterSun = task.days.get(6)
-
         selectedIcon = task.icon
         reminder?.let {
             minute = reminder.minute

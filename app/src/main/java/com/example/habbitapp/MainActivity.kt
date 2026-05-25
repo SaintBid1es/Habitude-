@@ -200,6 +200,8 @@ fun MainPage(toAddTaskPageClick: ()-> Unit,onTaskClick: (Int) -> Unit,
                         items(tasks.filter { it.days.get(today) ==  true }) { task ->
                             TaskCard(task, onUpdatePage = {
                                 onTaskClick(task.id)
+                            }, onTaskUpdate = {
+                                viewModel.updateTask(it)
                             })
 
                         }
@@ -209,6 +211,8 @@ fun MainPage(toAddTaskPageClick: ()-> Unit,onTaskClick: (Int) -> Unit,
                         items(tasks.filter { it.repeat == 2 }) { task ->
                             TaskCard(task, onUpdatePage = {
                                 onTaskClick(task.id)
+                            }, onTaskUpdate = {
+                                viewModel.updateTask(it)
                             })
 
                         }
@@ -218,6 +222,8 @@ fun MainPage(toAddTaskPageClick: ()-> Unit,onTaskClick: (Int) -> Unit,
                         items(tasks.filter { it.repeat == 3 }) { task ->
                             TaskCard(task, onUpdatePage = {
                                 onTaskClick(task.id)
+                            }, onTaskUpdate = {
+                                viewModel.updateTask(it)
                             })
 
                         }
@@ -227,6 +233,8 @@ fun MainPage(toAddTaskPageClick: ()-> Unit,onTaskClick: (Int) -> Unit,
                         items(tasks) { task ->
                             TaskCard(task, onUpdatePage = {
                                 onTaskClick(task.id)
+                            }, onTaskUpdate = {
+                                viewModel.updateTask(it)
                             })
 
                         }

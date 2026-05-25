@@ -59,7 +59,7 @@ fun LevelProductivityPage(
     var indicatorValue by remember { mutableIntStateOf(0) }
     val viewModel: TaskViewModel = viewModel()
     val date = LocalDate.now().toString()
-    scope.launch {
+    LaunchedEffect(date) {
         val allTasks  =  viewModel.getCountTask()
         indicatorValue = viewModel.getIndicator(date,allTasks)
     }
