@@ -58,6 +58,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.habbitapp.model.utils.SettingsManager
 import com.example.habbitapp.view.navigation.AppNavHost
 import com.example.habbitapp.view.ui.card.TaskCard
+import com.example.habbitapp.view.ui.scaffold.AppDrawerScaffold
 import com.example.habbitapp.view.ui.theme.HabbitAppTheme
 import com.example.habbitapp.viewmodel.TaskViewModel
 import kotlinx.coroutines.flow.first
@@ -91,70 +92,54 @@ class MainActivity : AppCompatActivity() {
 
 @SuppressLint("NewApi")
 @Composable
-fun MainPage(toAddTaskPageClick: ()-> Unit,onTaskClick: (Int) -> Unit,
-              toAimsAndObjectivesPageClick: ()-> Unit,toSettingsPage: ()-> Unit,toProductivityPage: ()-> Unit) {
+fun MainPage(
+    toAddTaskPageClick: () -> Unit,
+    onTaskClick: (Int) -> Unit,
+    toAimsAndObjectivesPageClick: () -> Unit,
+    toSettingsPage: () -> Unit,
+    toProductivityPage: () -> Unit
+) {
     var selectedFilter by remember { mutableIntStateOf(0) }
     val viewModel: TaskViewModel = viewModel()
-    val tasks  by viewModel.task.collectAsStateWithLifecycle()
+    val tasks by viewModel.task.collectAsStateWithLifecycle()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
-    ModalNavigationDrawer(
-        drawerState = drawerState,
-        drawerContent = {
-            ModalDrawerSheet {
-                Text(stringResource(R.string.drawer_navigation), modifier = Modifier.padding(16.dp))
-                HorizontalDivider()
-                NavigationDrawerItem(
-                    label = { Text(stringResource(R.string.menu_habits)) },
-                    icon = { Icon(painter = painterResource(R.drawable.habit_ic), contentDescription = null,modifier= Modifier.size(25.dp)) },
-                    selected = false,
-                    onClick = { scope.launch {
-                        drawerState.apply {
-                            if (isClosed) open() else close()
-                        }
-                    }
-                    }
-                )
-                NavigationDrawerItem(
-                    label = { Text(stringResource(R.string.menu_tasks)) },
-                    icon = { Icon(painter = painterResource(R.drawable.mission_ic), contentDescription = null,modifier= Modifier.size(25.dp)) },
-                    selected = false,
-                    onClick = { toAimsAndObjectivesPageClick() }
-                )
-                NavigationDrawerItem(
-                    label = { Text(stringResource(R.string.menu_productivity)) },
-                    icon = { Icon(painter = painterResource(R.drawable.graphic_ic), contentDescription = null,modifier= Modifier.size(25.dp)) },
-                    selected = false,
-                    onClick = { toProductivityPage() }
-                )
-                NavigationDrawerItem(
-                    label = { Text(stringResource(R.string.menu_settings)) },
-                    icon = { Icon(Icons.Default.Settings, contentDescription = null,modifier= Modifier.size(25.dp)) },
-                    selected = false,
-                    onClick = { toSettingsPage() }
-                )
-
+    AppDrawerScaffold(
+        toAimsAndObjectivesPageClick = toAimsAndObjectivesPageClick,
+        toSettingsPage = toSettingsPage,
+        toProductivityPage = toProductivityPage,
+        toMainPageClick = {
+            scope.launch {
+                drawerState.apply {
+                    if (isClosed) open() else close()
+                }
             }
-        }
+        },
+        drawerState = drawerState
     ) {
-
-
-        Column(modifier = Modifier.fillMaxSize().padding(15.dp)) {
-
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(15.dp)
+        ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 IconButton(onClick = {
-                    scope.launch {drawerState.open()} }) {
+                    scope.launch { drawerState.open() }
+                }) {
                     Icon(Icons.Filled.Menu, stringResource(R.string.cd_menu))
                 }
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center
                 ) {
-
-                    Text(stringResource(R.string.title_habit), fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                    Text(
+                        stringResource(R.string.title_habit),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp
+                    )
                     Text(
                         stringResource(R.string.title_app),
                         fontWeight = FontWeight.Bold,
@@ -189,15 +174,15 @@ fun MainPage(toAddTaskPageClick: ()-> Unit,onTaskClick: (Int) -> Unit,
                     onClick = { selectedFilter = 3 }
                 )
             }
-
-
-
-
-            LazyColumn(modifier = Modifier.fillMaxSize().padding(10.dp)) {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(10.dp)
+            ) {
                 when (selectedFilter) {
                     0 -> {
-                        val today = LocalDate.now().dayOfWeek.value-1
-                        items(tasks.filter { it.days.get(today) ==  true }) { task ->
+                        val today = LocalDate.now().dayOfWeek.value - 1
+                        items(tasks.filter { it.days.get(today) == true }) { task ->
                             TaskCard(task, onUpdatePage = {
                                 onTaskClick(task.id)
                             }, onTaskUpdate = {
@@ -245,7 +230,9 @@ fun MainPage(toAddTaskPageClick: ()-> Unit,onTaskClick: (Int) -> Unit,
         }
         Box(
             contentAlignment = Alignment.BottomEnd,
-            modifier = Modifier.fillMaxSize().padding(30.dp)
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(30.dp)
         ) {
             FloatingActionButton(
                 onClick = toAddTaskPageClick,
@@ -254,6 +241,7 @@ fun MainPage(toAddTaskPageClick: ()-> Unit,onTaskClick: (Int) -> Unit,
             }
         }
     }
+
 }
 
 @Preview()
@@ -267,6 +255,7 @@ fun MainPagePreview() {
         )
     }
 }
+
 @Composable
 fun FilterChip(
     text: String,

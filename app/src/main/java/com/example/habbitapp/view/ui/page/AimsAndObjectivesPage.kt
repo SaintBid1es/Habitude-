@@ -56,6 +56,7 @@ import com.example.habbitapp.R
 import com.example.habbitapp.view.ui.card.AimCard
 import com.example.habbitapp.view.ui.card.TaskCard
 import com.example.habbitapp.view.ui.customElement.RowKalendarMy
+import com.example.habbitapp.view.ui.scaffold.AppDrawerScaffold
 import com.example.habbitapp.view.ui.theme.GrayLight
 import com.example.habbitapp.view.ui.theme.GrayText
 import com.example.habbitapp.view.ui.theme.GreenLight
@@ -90,73 +91,19 @@ fun AimsAndObjectibesPage(
         initialFirstVisibleItemIndex = (uiState.dates.size / 2) - 1,
         initialFirstVisibleItemScrollOffset = -10
     )
-    ModalNavigationDrawer(
-        drawerState = drawerState,
-        drawerContent = {
-            ModalDrawerSheet {
-                Text(stringResource(R.string.drawer_navigation), modifier = Modifier.padding(16.dp))
-                HorizontalDivider()
-                NavigationDrawerItem(
-                    label = { Text(stringResource(R.string.menu_habits)) },
-                    icon = {
-                        Icon(
-                            painter = painterResource(R.drawable.habit_ic),
-                            contentDescription = null,
-                            modifier = Modifier.size(25.dp)
-                        )
-                    },
-                    selected = false,
-                    onClick = { toMainPageClick() }
-                )
-                NavigationDrawerItem(
-                    label = { Text(stringResource(R.string.menu_tasks)) },
-                    icon = {
-                        Icon(
-                            painter = painterResource(R.drawable.mission_ic),
-                            contentDescription = null,
-                            modifier = Modifier.size(25.dp)
-                        )
-                    },
-                    selected = false,
-                    onClick = {
-                        scope.launch {
-                            drawerState.apply {
-                                if (isClosed) open() else close()
-                            }
-                        }
-                    }
-                )
-                NavigationDrawerItem(
-                    label = { Text(stringResource(R.string.menu_productivity)) },
-                    icon = {
-                        Icon(
-                            painter = painterResource(R.drawable.graphic_ic),
-                            contentDescription = null,
-                            modifier = Modifier.size(25.dp)
-                        )
-                    },
-                    selected = false,
-                    onClick = { toProductivityPageClick() }
-                )
-                NavigationDrawerItem(
-                    label = { Text(stringResource(R.string.menu_settings)) },
-                    icon = {
-                        Icon(
-                            Icons.Default.Settings,
-                            contentDescription = null,
-                            modifier = Modifier.size(25.dp)
-                        )
-                    },
-                    selected = false,
-                    onClick = { toSettingsPageClick() }
-                )
-
+    AppDrawerScaffold(
+        toAimsAndObjectivesPageClick = {  scope.launch {
+            drawerState.apply {
+                if (isClosed) open() else close()
             }
-        }
+        }},
+        toSettingsPage = toSettingsPageClick,
+        toProductivityPage = toProductivityPageClick,
+        toMainPageClick = toMainPageClick,
+        drawerState = drawerState
     ) {
 
-
-        Column(modifier = Modifier
+    Column(modifier = Modifier
             .fillMaxSize()
             .padding(15.dp)) {
 

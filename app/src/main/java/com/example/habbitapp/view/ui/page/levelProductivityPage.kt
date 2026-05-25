@@ -44,6 +44,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.habbitapp.R
 import com.example.habbitapp.view.ui.customElement.CustomComponent
+import com.example.habbitapp.view.ui.scaffold.AppDrawerScaffold
 import com.example.habbitapp.viewmodel.TaskViewModel
 import io.github.chouaibmo.rowkalendar.extensions.now
 import kotlinx.coroutines.flow.count
@@ -63,49 +64,20 @@ fun LevelProductivityPage(
         val allTasks  =  viewModel.getCountTask()
         indicatorValue = viewModel.getIndicator(date,allTasks)
     }
-    ModalNavigationDrawer(
-        drawerState = drawerState,
-        drawerContent = {
-            ModalDrawerSheet {
-                Text(stringResource(R.string.drawer_navigation), modifier = Modifier.padding(16.dp))
-                HorizontalDivider()
-                NavigationDrawerItem(
-                    label = { Text(stringResource(R.string.menu_habits)) },
-                    icon = { Icon(painter = painterResource(R.drawable.habit_ic), contentDescription = null,modifier= Modifier.size(25.dp)) },
-                    selected = false,
-                    onClick = {
-                        toMainPage()
-                    }
-
-                )
-                NavigationDrawerItem(
-                    label = { Text(stringResource(R.string.menu_tasks)) },
-                    icon = { Icon(painter = painterResource(R.drawable.mission_ic), contentDescription = null,modifier= Modifier.size(25.dp)) },
-                    selected = false,
-                    onClick = { toAimsAndObjectivesPageClick() }
-                )
-                NavigationDrawerItem(
-                    label = { Text(stringResource(R.string.menu_productivity)) },
-                    icon = { Icon(painter = painterResource(R.drawable.graphic_ic), contentDescription = null,modifier= Modifier.size(25.dp)) },
-                    selected = false,
-                    onClick = { scope.launch {
-                        drawerState.apply {
-                            if (isClosed) open() else close()
-                        }
-                    }
-                    }
-                )
-                NavigationDrawerItem(
-                    label = { Text(stringResource(R.string.menu_settings)) },
-                    icon = { Icon(Icons.Default.Settings, contentDescription = null,modifier= Modifier.size(25.dp)) },
-                    selected = false,
-                    onClick = { toSettingsPage() }
-                )
-
+    AppDrawerScaffold(
+        toAimsAndObjectivesPageClick = toAimsAndObjectivesPageClick,
+        toSettingsPage = toSettingsPage,
+        toProductivityPage = {   scope.launch {
+            drawerState.apply {
+                if (isClosed) open() else close()
             }
-        }
+        }},
+        toMainPageClick = toMainPage,
+        drawerState = drawerState
     ) {
-        Column(modifier = Modifier.fillMaxSize().padding(15.dp)) {
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .padding(15.dp)) {
 
             Row(
                 modifier = Modifier.fillMaxWidth(),

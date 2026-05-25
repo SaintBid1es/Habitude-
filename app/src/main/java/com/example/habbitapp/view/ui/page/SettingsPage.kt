@@ -47,6 +47,7 @@ import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.habbitapp.R
 import com.example.habbitapp.model.utils.SettingsManager
+import com.example.habbitapp.view.ui.scaffold.AppDrawerScaffold
 
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
@@ -63,74 +64,16 @@ fun SettingsPage(
     val context = LocalContext.current
     val settingsManager = remember { SettingsManager(context.applicationContext) }
     val isDarkMode by settingsManager.isDarkMode.collectAsState(initial = false)
-        ModalNavigationDrawer(
-        drawerState = drawerState,
-        drawerContent = {
-            ModalDrawerSheet {
-                Text(stringResource(R.string.drawer_navigation), modifier = Modifier.padding(16.dp))
-                HorizontalDivider()
-                NavigationDrawerItem(
-                    label = { Text(stringResource(R.string.menu_habits)) },
-                    icon = {
-                        Icon(
-                            painter = painterResource(R.drawable.habit_ic),
-                            contentDescription = null,
-                            modifier = Modifier.size(25.dp)
-                        )
-                    },
-                    selected = false,
-                    onClick = {
-                        toMainPageClick()
-                    }
-
-                )
-                NavigationDrawerItem(
-                    label = { Text(stringResource(R.string.menu_tasks)) },
-                    icon = {
-                        Icon(
-                            painter = painterResource(R.drawable.mission_ic),
-                            contentDescription = null,
-                            modifier = Modifier.size(25.dp)
-                        )
-                    },
-                    selected = false,
-                    onClick = { toAimsAndObjectivesPageClick() }
-                )
-                NavigationDrawerItem(
-                    label = { Text(stringResource(R.string.menu_productivity)) },
-                    icon = {
-                        Icon(
-                            painter = painterResource(R.drawable.graphic_ic),
-                            contentDescription = null,
-                            modifier = Modifier.size(25.dp)
-                        )
-                    },
-                    selected = false,
-                    onClick = {
-                        toProductivityPage()
-                    }
-                )
-                NavigationDrawerItem(
-                    label = { Text(stringResource(R.string.menu_settings)) },
-                    icon = {
-                        Icon(
-                            Icons.Default.Settings,
-                            contentDescription = null,
-                            modifier = Modifier.size(25.dp)
-                        )
-                    },
-                    selected = false,
-                    onClick = {
-                        scope.launch {
-                            drawerState.apply {
-                                if (isClosed) open() else close()
-                            }
-                        }
-                    }
-                )
-
+    AppDrawerScaffold(
+        toAimsAndObjectivesPageClick = toAimsAndObjectivesPageClick,
+        toSettingsPage = {  scope.launch {
+            drawerState.apply {
+                if (isClosed) open() else close()
             }
-        }
+        }},
+        toProductivityPage = toProductivityPage,
+        toMainPageClick = toMainPageClick,
+        drawerState = drawerState
     ) {
         Column(modifier = Modifier
             .fillMaxSize()
