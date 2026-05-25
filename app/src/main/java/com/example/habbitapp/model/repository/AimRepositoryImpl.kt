@@ -3,11 +3,14 @@ package com.example.habbitapp.model.repository
 import com.example.habbitapp.model.dao.AimsDao
 import com.example.habbitapp.model.dao.TaskDao
 import com.example.habbitapp.model.entity.Aims
+import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.LocalDate
 
 class AimRepositoryImpl(
     private val taskDao: AimsDao,
 ) : AimRepository {
+    override fun observeAllAims(): Flow<List<Aims>>  = taskDao.getAllAims()
+
     override suspend fun deleteByIdAims(id: Int) {
        return taskDao.deleteAimsById(id)
     }

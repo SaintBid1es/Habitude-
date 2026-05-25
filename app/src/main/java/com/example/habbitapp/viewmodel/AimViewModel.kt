@@ -28,7 +28,7 @@ class AimViewModel(
     init {
 
         viewModelScope.launch {
-            dao.getAllAims().collectLatest { aimList ->
+            repository.observeAllAims().collectLatest { aimList ->
                 _aims.value = aimList
             }
         }

@@ -31,7 +31,7 @@ class ReminderViewModel(
     init {
 
         viewModelScope.launch {
-            dao.getAllReminder().collectLatest { reminderList ->
+            repository.observeAllReminder().collectLatest { reminderList ->
                 _reminder.value = reminderList
             }
         }
