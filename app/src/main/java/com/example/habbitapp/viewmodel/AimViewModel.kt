@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDate
 
 class AimViewModel : ViewModel() {
     private val dao by lazy {
@@ -26,7 +27,24 @@ class AimViewModel : ViewModel() {
             }
         }
     }
+    fun binarySearchIndexDate(list: List<LocalDate>,date:LocalDate): Int {
+        var low = 0
+        var high  = list.size - 1
+        var mid:Int = 0
+        while (low<=high){
+            mid = (low+high) / 2
+            var guess = list[mid]
+            if (guess == date) return mid
+            else if (guess>date){
+                high = mid-1
+            }
+            else {
+                low = mid+1
+            }
+        }
 
+        return mid
+    }
     fun insertAim(aim: Aims) = viewModelScope.launch {
         dao.insert(aim)
     }

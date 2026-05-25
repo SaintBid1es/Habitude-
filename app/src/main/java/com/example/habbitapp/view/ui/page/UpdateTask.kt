@@ -54,31 +54,30 @@ import kotlinx.coroutines.launch
 @Composable
 fun UpdateTaskPage(toMainPageClick: ()-> Unit,idTask: Int) {
     val colors = listOf(
-        // Rose/Red tones
-        Color(0xFFFF8A80),  // Коралловый
-        Color(0xFFF48FB1),  // Розовый
 
-        // Orange/Yellow tones
-        Color(0xFFFFAB91),  // Персиковый
-        Color(0xFFFFE082),  // Янтарный
+        Color(0xFFFF8A80),
+        Color(0xFFF48FB1),
 
-        // Green tones
-        Color(0xFFA5D6A7),  // Мятный
-        Color(0xFF80CBC4),  // Бирюзовый
 
-        // Blue tones
-        Color(0xFF81D4FA),  // Небесный
-        Color(0xFF9FA8DA),  // Индиго
+        Color(0xFFFFAB91),
+        Color(0xFFFFE082),
 
-        // Purple tones
-        Color(0xFFCE93D8),  // Лавандовый
-        Color(0xFFB39DDB),  // Сиреневый
 
-        // Neutral tones
-        Color(0xFFEEEEEE),  // Светлый
-        Color(0xFFBDBDBD),  // Средний
-        Color(0xFF757575),  // Тёмный
-        Color(0xFF424242),  // Очень тёмный
+        Color(0xFFA5D6A7),
+        Color(0xFF80CBC4),
+
+        Color(0xFF81D4FA),
+        Color(0xFF9FA8DA),
+
+
+        Color(0xFFCE93D8),
+        Color(0xFFB39DDB),
+
+
+        Color(0xFFEEEEEE),
+        Color(0xFFBDBDBD),
+        Color(0xFF757575),
+        Color(0xFF424242),
     )
     var text by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }

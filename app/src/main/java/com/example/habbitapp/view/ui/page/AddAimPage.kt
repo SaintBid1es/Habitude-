@@ -74,7 +74,7 @@ fun AddAimPage(toAimsPageClick: () -> Unit) {
     val checkedState = remember { mutableStateOf(false) }
     var selectedDate2 by remember { mutableStateOf<Long?>(null) }
     val date = convertMillisToDate(selectedDate2 ?: System.currentTimeMillis())
-    //val date = LocalDate.now()
+
 
     Column(
         modifier = Modifier
@@ -301,7 +301,6 @@ fun AddAimPagePreviw() {
 }
 
 fun convertMillisToDate(millis: Long): String {
-    //val formatter = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
     val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
     return formatter.format(Date(millis))
 }

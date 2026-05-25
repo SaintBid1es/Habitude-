@@ -187,7 +187,7 @@ fun AimsAndObjectibesPage(
                         scope.launch {
                             val date = LocalDate.now()
                             val list = viewModelUI.uiState.value.dates
-                            val index = binarySearchIndexDate(list,date)
+                            val index = viewModel.binarySearchIndexDate(list,date)
                             listState.animateScrollToItem(index)
                         }
                     }, modifier = Modifier.padding(5.dp),
@@ -308,22 +308,5 @@ fun AimsAndObjectibesPagePreview() {
 }
 
 
-fun binarySearchIndexDate(list: List<LocalDate>,date:LocalDate): Int {
-    var low = 0
-    var high  = list.size - 1
-    var mid:Int = 0
-    while (low<=high){
-        mid = (low+high) / 2
-        var guess = list[mid]
-        if (guess == date) return mid
-        else if (guess>date){
-            high = mid-1
-        }
-        else {
-            low = mid+1
-        }
-    }
 
-    return mid
-}
 

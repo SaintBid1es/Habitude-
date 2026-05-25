@@ -80,22 +80,16 @@ import kotlinx.coroutines.launch
 @Composable
 fun AddTaskPage(toMainPageClick: ()-> Unit) {
     val colors = listOf(
-
         Color(0xFFFF8A80),
         Color(0xFFF48FB1),
-
         Color(0xFFFFAB91),
         Color(0xFFFFE082),
-
         Color(0xFFA5D6A7),
         Color(0xFF80CBC4),
-
-
         Color(0xFF81D4FA),
         Color(0xFF9FA8DA),
         Color(0xFFCE93D8),
         Color(0xFFB39DDB),
-
         Color(0xFFEEEEEE),
         Color(0xFFBDBDBD),
         Color(0xFF757575),
@@ -104,7 +98,6 @@ fun AddTaskPage(toMainPageClick: ()-> Unit) {
     var text by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
     var selectedFilterRepeat by remember { mutableIntStateOf(1) }
-
     var selectedFilterMonday by remember { mutableStateOf(true) }
     var selectedFilterTue by remember { mutableStateOf(true) }
     var selectedFilterWed by remember { mutableStateOf(true) }
@@ -112,21 +105,17 @@ fun AddTaskPage(toMainPageClick: ()-> Unit) {
     var selectedFilterFri by remember { mutableStateOf(true) }
     var selectedFilterSat by remember { mutableStateOf(true) }
     var selectedFilterSun by remember { mutableStateOf(true) }
-
     var selectedBackgroundColor by remember { mutableStateOf(colors[0]) }
     val viewModelTask : TaskViewModel = viewModel()
     val viewModelReminder : ReminderViewModel = viewModel()
     val checkedState = remember { mutableStateOf(false) }
-
     var minute by remember { mutableIntStateOf(1) }
     var hour by remember { mutableIntStateOf(10) }
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
-
     var openDialogIcon by remember {mutableStateOf(false)}
     val activity = LocalActivity.current
     var selectedIcon by remember { mutableStateOf("📚") }
-
     val notificationPermissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission()
     ) { isGranted ->
@@ -153,8 +142,6 @@ fun AddTaskPage(toMainPageClick: ()-> Unit) {
             }
             Text(stringResource(R.string.action_save), modifier = Modifier.clickable{
                 scope.launch {
-
-
                     val list = mutableListOf<Boolean>(
                         selectedFilterMonday,
                         selectedFilterTue,
@@ -217,10 +204,6 @@ fun AddTaskPage(toMainPageClick: ()-> Unit) {
                         viewModelReminder.insertReminder(reminder)
                         setTimeNotification(context, text, description,hour,minute,list,habitId.toInt())
                     }
-
-
-
-
                     toMainPageClick()
                 }
             })

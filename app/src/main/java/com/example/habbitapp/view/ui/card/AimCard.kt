@@ -97,27 +97,24 @@ fun AimCard(aims: Aims, onUpdatePage: () -> Unit) {
         shape = RoundedCornerShape(5.dp),
     ) {
         Column {
-            // Основной ряд с контентом и кнопкой
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Левая часть с текстом (занимает всё свободное место, но с ограничением)
                 Column(
                     modifier = Modifier
-                        .weight(1f)  // ← КЛЮЧЕВОЕ ИЗМЕНЕНИЕ: занимает оставшееся место
+                        .weight(1f)
                         .padding(5.dp)
                 ) {
-                    // Название задачи с ограничением по строкам
                     Text(
                         text = aims.name,
                         textDecoration = if (lineThrough) TextDecoration.LineThrough else null,
-                        maxLines = 2,  // ← Ограничиваем максимум 2 строками
-                        overflow = TextOverflow.Ellipsis,  // ← Добавляем многоточие
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
                         style = MaterialTheme.typography.bodyLarge
                     )
 
-                    // Строка с информацией о подзадачах и категории
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(4.dp),
                         verticalAlignment = Alignment.CenterVertically
@@ -146,10 +143,9 @@ fun AimCard(aims: Aims, onUpdatePage: () -> Unit) {
                     }
                 }
 
-                // Правая часть - кнопка выполнения (фиксированный размер)
                 Box(
                     modifier = Modifier
-                        .requiredSize(48.dp),  // ← Фиксированный размер контейнера
+                        .requiredSize(48.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     IconButton(
@@ -177,7 +173,7 @@ fun AimCard(aims: Aims, onUpdatePage: () -> Unit) {
                 }
             }
 
-            // Список подзадач (раскрывающийся)
+
             if (onEnabledList && aims.subAims != null) {
                 LazyColumn(
                     modifier = Modifier
@@ -190,7 +186,6 @@ fun AimCard(aims: Aims, onUpdatePage: () -> Unit) {
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            // Текст подзадачи с ограничением
                             Text(
                                 text = subAimTitle,
                                 textDecoration = if (isCompleted) TextDecoration.LineThrough else null,
@@ -199,7 +194,7 @@ fun AimCard(aims: Aims, onUpdatePage: () -> Unit) {
                                 modifier = Modifier.weight(1f)
                             )
 
-                            // Кнопка выполнения подзадачи
+
                             IconButton(
                                 onClick = {
                                     val list = aims.subAims?.toMutableMap() ?: mutableMapOf()
@@ -244,7 +239,6 @@ fun AimCardPreview() {
     }
 }
 
-// Дополнительный превью для тестирования длинных текстов
 @SuppressLint("NewApi")
 @Composable
 @Preview(name = "Long text preview")
