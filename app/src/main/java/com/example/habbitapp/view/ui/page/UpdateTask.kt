@@ -54,26 +54,16 @@ import kotlinx.coroutines.launch
 @Composable
 fun UpdateTaskPage(toMainPageClick: ()-> Unit,idTask: Int) {
     val colors = listOf(
-
         Color(0xFFFF8A80),
         Color(0xFFF48FB1),
-
-
         Color(0xFFFFAB91),
         Color(0xFFFFE082),
-
-
         Color(0xFFA5D6A7),
         Color(0xFF80CBC4),
-
         Color(0xFF81D4FA),
         Color(0xFF9FA8DA),
-
-
         Color(0xFFCE93D8),
         Color(0xFFB39DDB),
-
-
         Color(0xFFEEEEEE),
         Color(0xFFBDBDBD),
         Color(0xFF757575),

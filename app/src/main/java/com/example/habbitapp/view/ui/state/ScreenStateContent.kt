@@ -17,9 +17,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.habbitapp.R
 
-/**
- * Рисует один из вариантов: загрузка, ошибка с retry, пусто или основной контент.
- */
+
 @Composable
 fun <T> ScreenStateContent(
     state: UiState<T>,

@@ -146,5 +146,4 @@ private fun scheduleWeeklyReminder(
         )
     }
 
-    Log.d("AlarmManager", "Scheduled reminder for $habitName on day $dayOfWeek at $hour:$minute")
 }

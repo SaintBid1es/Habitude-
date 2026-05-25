@@ -10,7 +10,7 @@ import java.time.temporal.ChronoUnit
 
 object StreakManager {
 
-    /** Подменяется в unit-тестах для фиксированной «сегодняшней» даты. */
+
     internal var todayProvider: () -> LocalDate = { LocalDate.now() }
 
     @SuppressLint("NewApi")

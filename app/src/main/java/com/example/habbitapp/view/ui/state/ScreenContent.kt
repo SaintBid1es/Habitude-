@@ -17,14 +17,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.habbitapp.R
 
-/**
- * Рисует контент в зависимости от [UiState].
- *
- * @param onRetry вызывается при нажатии «Повторить» в состоянии Error.
- * @param empty проверка «пустых» данных внутри Success (например, пустой список).
- * @param emptyContent UI для пустого Success.
- * @param content UI для непустого Success.
- */
+
 @Composable
 fun <T> ScreenContent(
     state: UiState<T>,

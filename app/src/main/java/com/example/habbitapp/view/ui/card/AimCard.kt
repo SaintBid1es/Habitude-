@@ -80,7 +80,7 @@ fun AimCard(aims: Aims, onUpdatePage: () -> Unit) {
         )
     )
 
-    // Проверка на выполнение всех подзадач
+
     if (aims.subAims?.filter { it.value == true }?.size == aims.subAims?.size) {
         if (!aims.subAims.isNullOrEmpty()) {
             lineThrough = true
