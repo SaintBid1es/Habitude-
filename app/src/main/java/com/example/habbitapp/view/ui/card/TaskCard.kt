@@ -74,12 +74,7 @@ fun TaskCard(task: Task, onUpdatePage: () -> Unit, onTaskUpdate: (Task) -> Unit)
         )
     )
 
-    LaunchedEffect(task.id) {
-        val resetTask = StreakManager.resetCheckExecForNewDay(task)
-        if (resetTask != task) {
-            onTaskUpdate(resetTask)
-        }
-    }
+
     Card(
         modifier = Modifier
             .padding(5.dp)

@@ -56,7 +56,7 @@ class AimViewModel(
         }
     }
     companion object {
-        private fun aimRepository(): AimRepository {
+        internal fun aimRepository(): AimRepository {
             val dao = ItemDatabase.getInstance(MyApplication.appContext).aimsDao()
             return AimRepositoryImpl(dao)
         }

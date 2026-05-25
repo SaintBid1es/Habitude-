@@ -9,8 +9,10 @@ import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import com.example.habbitapp.model.repository.AimRepository
 import com.example.habbitapp.model.utils.TaskMigrationWorker
 import com.example.habbitapp.viewmodel.AimViewModel
+import com.example.habbitapp.viewmodel.AimViewModel.Companion.aimRepository
 import dagger.hilt.android.HiltAndroidApp
 import io.github.chouaibmo.rowkalendar.extensions.now
 import kotlinx.coroutines.CoroutineScope
@@ -80,11 +82,11 @@ class MyApplication : Application(), Configuration.Provider {
         }
     }
     suspend fun changeTransferAims(){
-        val viewModelAims : AimViewModel = AimViewModel()
+        val repository: AimRepository = aimRepository()
         val date = LocalDate.now()
         coroutineScope {
             launch {
-                viewModelAims.migrateUnfinishedTasks(date.toString())
+                repository.migrateUnfinishedTasks(date.toString())
             }
         }
     }

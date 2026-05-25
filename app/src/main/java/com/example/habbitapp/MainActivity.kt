@@ -37,6 +37,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -56,6 +57,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.habbitapp.model.utils.SettingsManager
+import com.example.habbitapp.model.utils.StreakManager
 import com.example.habbitapp.view.navigation.AppNavHost
 import com.example.habbitapp.view.ui.card.TaskCard
 import com.example.habbitapp.view.ui.scaffold.AppDrawerScaffold
@@ -104,6 +106,15 @@ fun MainPage(
     val tasks by viewModel.task.collectAsStateWithLifecycle()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
+    LaunchedEffect(Unit) {
+        val currentTasks = tasks
+        currentTasks.forEach { task ->
+            val resetTask = StreakManager.resetCheckExecForNewDay(task)
+            if (resetTask != task) {
+                viewModel.updateTask(resetTask)
+            }
+        }
+    }
     AppDrawerScaffold(
         toAimsAndObjectivesPageClick = toAimsAndObjectivesPageClick,
         toSettingsPage = toSettingsPage,
