@@ -8,26 +8,41 @@ import com.example.habbitapp.model.entity.Task
 import com.example.habbitapp.model.repository.TaskRepository
 import com.example.habbitapp.model.repository.TaskRepositoryImpl
 import kotlinx.coroutines.Dispatchers
+import com.example.habbitapp.view.ui.state.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.count
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlin.getValue
 
 class TaskViewModel(
     private val repository: TaskRepository = defaultRepository(),
 ) : ViewModel() {
 
-    private val _tasks = MutableStateFlow<List<Task>>(emptyList())
-    val task: StateFlow<List<Task>> = _tasks
+    private val _tasksState = MutableStateFlow<UiState<List<Task>>>(UiState.Loading)
+    val tasksState: StateFlow<UiState<List<Task>>> = _tasksState
 
     init {
+        observeTasks()
+    }
+
+    fun reloadTasks() {
+        observeTasks()
+    }
+
+    private fun observeTasks() {
         viewModelScope.launch {
-            repository.observeAllTasks().collectLatest { taskList ->
-                _tasks.value = taskList
-            }
+            _tasksState.value = UiState.Loading
+            repository.observeAllTasks()
+                .catch { e ->
+                    _tasksState.value = UiState.Error(
+                        message = e.message ?: "Failed to load habits",
+                    )
+                }
+                .collectLatest { taskList ->
+                    _tasksState.value = UiState.Success(taskList)
+                }
         }
     }
 

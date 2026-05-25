@@ -65,7 +65,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.habbitapp.FilterChip
+import com.example.habbitapp.view.ui.page.FilterChip
 import com.example.habbitapp.R
 import com.example.habbitapp.model.entity.Reminder
 import com.example.habbitapp.model.entity.Task

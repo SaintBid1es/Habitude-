@@ -12,9 +12,13 @@ import com.example.habbitapp.model.entity.Aims
 import com.example.habbitapp.model.entity.Reminder
 import com.example.habbitapp.model.entity.Task
 
-@Database(version = 12, exportSchema = true, autoMigrations = [
-    AutoMigration(from = 12, to = 13)
-])
+@Database(version = 12,
+    entities = [Task::class, Aims::class, Reminder::class],
+    exportSchema = true,
+//    autoMigrations = [
+//    AutoMigration(from = 11, to = 12)
+//]
+)
 abstract class ItemDatabase : RoomDatabase() {
     abstract fun taskDao(): TaskDao
     abstract fun aimsDao(): AimsDao

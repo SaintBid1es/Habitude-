@@ -40,7 +40,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.habbitapp.FilterChip
+import com.example.habbitapp.view.ui.page.FilterChip
 import com.example.habbitapp.R
 import com.example.habbitapp.model.entity.Reminder
 import com.example.habbitapp.model.entity.Task

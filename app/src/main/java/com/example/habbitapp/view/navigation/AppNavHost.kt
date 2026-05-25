@@ -6,7 +6,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.example.habbitapp.MainPage
+import com.example.habbitapp.view.ui.page.MainPage
 import com.example.habbitapp.view.ui.page.AddAimPage
 import com.example.habbitapp.view.ui.page.AddTaskPage
 import com.example.habbitapp.view.ui.page.AimsAndObjectibesPage

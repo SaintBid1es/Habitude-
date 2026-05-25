@@ -65,4 +65,8 @@
     <string name="cd_undo">Отменить</string>
     <string name="cd_complete">Выполнить</string>
     <string name="cd_selected">Выбрано</string>
+    <string name="state_loading">Загрузка…</string>
+    <string name="state_error_generic">Что-то пошло не так</string>
+    <string name="state_empty_habits">Привычек пока нет. Нажмите +, чтобы добавить.</string>
+    <string name="action_retry">Повторить</string>
 </resources>

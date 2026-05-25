@@ -18,10 +18,6 @@ import kotlinx.datetime.LocalDate
 class AimViewModel(
     private val repository: AimRepository = aimRepository()
 ) : ViewModel() {
-    private val dao by lazy {
-        ItemDatabase.getInstance(MyApplication.appContext).aimsDao()
-    }
-
     private val _aims = MutableStateFlow<List<Aims>>(emptyList())
     val aim: StateFlow<List<Aims>> = _aims
 
