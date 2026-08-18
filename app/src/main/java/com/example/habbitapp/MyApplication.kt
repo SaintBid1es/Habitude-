@@ -2,17 +2,20 @@ package com.example.habbitapp
 
 import android.app.Application
 import android.content.Context
+import android.os.Build
+import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.hilt.work.HiltWorkerFactory
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.work.Configuration
 import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.example.habbitapp.model.repository.AimRepository
+import com.example.habbitapp.model.utils.DailySummaryScheduler
+import com.example.habbitapp.model.utils.EndDayNotificationScheduler
 import com.example.habbitapp.model.utils.TaskMigrationWorker
 import com.example.habbitapp.viewmodel.AimViewModel
-import com.example.habbitapp.viewmodel.AimViewModel.Companion.aimRepository
 import dagger.hilt.android.HiltAndroidApp
 import io.github.chouaibmo.rowkalendar.extensions.now
 import kotlinx.coroutines.CoroutineScope
@@ -30,38 +33,53 @@ class MyApplication : Application(), Configuration.Provider {
         lateinit var appContext: Context
             private set
     }
+
     private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
-    @Inject
-    lateinit var workerFactory: HiltWorkerFactory
+
+//    @Inject
+//    lateinit var workerFactory: HiltWorkerFactory
 
     override val workManagerConfiguration: Configuration
         get() = Configuration.Builder()
-            .setWorkerFactory(workerFactory)
+            //.setWorkerFactory(workerFactory)
             .build()
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate() {
         super.onCreate()
         appContext = applicationContext
+        android.os.Handler(
+            android.os.Looper.getMainLooper()
+        ).postDelayed({
 
+            DailySummaryScheduler.schedule(this)
+            EndDayNotificationScheduler.schedule(this)
+
+        }, 2000)
         android.os.Handler(android.os.Looper.getMainLooper()).post {
             setupDailyMigration()
         }
 
+
+        // Запуск миграции задач
         applicationScope.launch {
             changeTransferAims()
         }
 
+
     }
-    //TODO В ДОКУМЕНТАЦИЮ ИЗМЕНИТЬ ЖТОТ ФАЙЛ
+
+
+
+
 
     private fun setupDailyMigration() {
-
-        if (!::workerFactory.isInitialized) {
-            android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
-                setupDailyMigration()
-            }, 100)
-            return
-        }
+//        if (!::workerFactory.isInitialized) {
+//            android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
+//                setupDailyMigration()
+//            }, 100)
+//            return
+//        }
 
         try {
             val constraints = Constraints.Builder()
@@ -81,8 +99,9 @@ class MyApplication : Application(), Configuration.Provider {
             e.printStackTrace()
         }
     }
-    suspend fun changeTransferAims(){
-        val repository: AimRepository = aimRepository()
+
+    suspend fun changeTransferAims() {
+        val repository: AimRepository = AimViewModel.aimRepository()
         val date = LocalDate.now()
         coroutineScope {
             launch {

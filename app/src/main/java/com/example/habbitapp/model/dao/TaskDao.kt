@@ -29,6 +29,9 @@ interface TaskDao {
 
     @Query("SELECT (COUNT(CASE WHEN completionDates = :date THEN 1 END) * 100 / :count) FROM task")
     fun getIndicator(date: String,count:Int): Int
+    @Query("SELECT * FROM task")
+    suspend fun getAllTasks(): List<Task> // Теперь это безопасный suspend-метод
+
 
     @Query("SELECT * FROM task WHERE id = :id")
     suspend fun getTaskById(id: Int): Task?
@@ -36,5 +39,31 @@ interface TaskDao {
     @Query("Delete from task WHERE id = :id")
     suspend fun deleteTaskById(id: Int)
 
+    @Query("SELECT COUNT(*) FROM task")
+    fun getCountBlocking(): Int
+    // Блокирующий метод - получает все привычки
+
+
+    // Suspend метод для получения всех привычек
+    @Query("SELECT COUNT(*) FROM task")
+    suspend fun getCountSuspend(): Int
+
+    // Блокирующий метод - получает привычки на сегодня (по дням недели)
+    @Query("SELECT * FROM task")
+    fun getAllTasksBlocking(): List<Task>
+
+    @Query("SELECT * FROM task WHERE checkExec = false")
+    fun getAllTasksBlockingForNotification(): List<Task>
+    // Получить привычки на сегодня (по дням недели)
+    suspend fun getTasksForToday(): List<Task> {
+        val allTasks = getAllTasksBlocking()
+        val today = java.time.LocalDate.now().dayOfWeek.value - 1
+        return allTasks.filter { it.days.getOrNull(today) == true }
+    }
+
+    // Получить количество привычек на сегодня
+    suspend fun getCountForToday(): Int {
+        return getTasksForToday().size
+    }
 
 }

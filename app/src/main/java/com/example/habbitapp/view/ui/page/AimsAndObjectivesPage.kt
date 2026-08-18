@@ -87,8 +87,8 @@ fun AimsAndObjectibesPage(
     ) {
 
     Column(modifier = Modifier
-            .fillMaxSize()
-            .padding(15.dp)) {
+        .fillMaxSize()
+        .padding(15.dp)) {
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -107,7 +107,7 @@ fun AimsAndObjectibesPage(
 
 //                    Text("Цели", fontWeight = FontWeight.Bold, fontSize = 20.sp)
                     Text(
-                        stringResource(R.string.screen_tasks),
+                        stringResource(R.string.aims),
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp,
                         modifier = Modifier.padding(start = 10.dp),
@@ -126,7 +126,7 @@ fun AimsAndObjectibesPage(
                         contentColor = Color.White
                     )) {
                         Text(
-                            text = "Today",
+                            text = stringResource(R.string.today),
                             fontWeight = FontWeight.Bold,
                             fontSize = 15.sp,
                             )

@@ -2,7 +2,7 @@
     <string name="app_name">HabbitApp</string>
     <string name="drawer_navigation">Navigation</string>
     <string name="menu_habits">Habit management</string>
-    <string name="menu_tasks">Task management</string>
+    <string name="menu_tasks">Purpose management</string>
     <string name="menu_productivity">Productivity level</string>
     <string name="menu_settings">Settings</string>
     <string name="cd_menu">Menu</string>
@@ -11,6 +11,7 @@
     <string name="title_app">App</string>
     <string name="filter_today">Today</string>
     <string name="filter_daily">Daily</string>
+
     <string name="filter_weekly">Weekly</string>
     <string name="filter_monthly">Monthly</string>
     <string name="filter_overall">Overall</string>
@@ -50,6 +51,7 @@
     <string name="aim_low">Low</string>
     <string name="aim_medium">Medium</string>
     <string name="aim_high">High</string>
+    <string name="aims">Aim</string>
     <string name="aim_category_shopping">Shopping</string>
     <string name="aim_category_home">Home</string>
     <string name="aim_category_work">Work</string>
@@ -57,8 +59,8 @@
     <string name="aim_category_health">Health</string>
     <string name="aim_category_finance">Finance</string>
     <string name="aim_category_fun">Entertainment</string>
-    <string name="label_task_name">Task name</string>
-    <string name="label_subtask">Subtask</string>
+    <string name="label_task_name">Purpose name</string>
+    <string name="label_subtask">task</string>
     <string name="date_picker_ok">OK</string>
     <string name="task_days_suffix"> days</string>
     <string name="cd_undo">Undo</string>
@@ -69,4 +71,5 @@
     <string name="state_error_generic">Something went wrong</string>
     <string name="state_empty_habits">No habits yet. Tap + to add one.</string>
     <string name="action_retry">Retry</string>
+    <string name="today">Today</string>
 </resources>

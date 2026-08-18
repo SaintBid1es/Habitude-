@@ -1,6 +1,12 @@
 package com.example.habbitapp.view.ui.page
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Build
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -32,16 +38,21 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalCursorBlinkEnabled
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.habbitapp.R
 import com.example.habbitapp.model.utils.StreakManager
 import com.example.habbitapp.model.entity.Task
+import com.example.habbitapp.model.utils.DailySummaryReceiver
 import com.example.habbitapp.view.ui.card.TaskCard
 import com.example.habbitapp.view.ui.scaffold.AppDrawerScaffold
 import com.example.habbitapp.view.ui.state.ScreenStateContent
@@ -140,10 +151,12 @@ fun MainPage(
                     isSelected = selectedFilter == 2,
                     onClick = { selectedFilter = 2 }
                 )
+
                 FilterChip(
                     text = stringResource(R.string.filter_overall),
                     isSelected = selectedFilter == 3,
                     onClick = { selectedFilter = 3 }
+
                 )
             }
             ScreenStateContent(
@@ -180,7 +193,7 @@ fun MainPage(
 
 @SuppressLint("NewApi")
 @Composable
-private fun HabitList(
+ fun HabitList(
     tasks: List<Task>,
     selectedFilter: Int,
     onTaskClick: (Int) -> Unit,
@@ -238,3 +251,4 @@ fun FilterChip(
         color = if (isSelected) Color.Green else Color.Unspecified
     )
 }
+
