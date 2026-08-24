@@ -71,4 +71,6 @@
     <string name="state_error_generic">Что-то пошло не так</string>
     <string name="state_empty_habits">Привычек пока нет. Нажмите +, чтобы добавить.</string>
     <string name="action_retry">Повторить</string>
+    <string name="notPower">Не было сил</string>
+    <string name="forgot">Забыл\n</string>
 </resources>

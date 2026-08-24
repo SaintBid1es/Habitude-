@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 12,
-    "identityHash": "54ea7af37590048e3c4c2ea244d2d5f9",
+    "version": 14,
+    "identityHash": "2a378dceae12d470dc1741f9fc732080",
     "entities": [
       {
         "tableName": "task",
@@ -251,12 +251,61 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "failedHabit",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `taskId` INTEGER NOT NULL, `date` TEXT NOT NULL, `reasonSelected` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "taskId",
+            "columnName": "taskId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "date",
+            "columnName": "date",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reasonSelected",
+            "columnName": "reasonSelected",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_failedHabit_taskId_date",
+            "unique": true,
+            "columnNames": [
+              "taskId",
+              "date"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_failedHabit_taskId_date` ON `${TABLE_NAME}` (`taskId`, `date`)"
+          }
+        ],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '54ea7af37590048e3c4c2ea244d2d5f9')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '2a378dceae12d470dc1741f9fc732080')"
     ]
   }
 }

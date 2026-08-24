@@ -72,4 +72,8 @@
     <string name="state_empty_habits">No habits yet. Tap + to add one.</string>
     <string name="action_retry">Retry</string>
     <string name="today">Today</string>
+    <string name="notPower">нет сил</string>
+    <string name="notTime">Не было времени\n</string>
+    <string name="forgot">Забыл\n</string>
+    <string name="other">Другое</string>
 </resources>

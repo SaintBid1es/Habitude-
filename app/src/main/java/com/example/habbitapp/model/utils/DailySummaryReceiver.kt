@@ -71,7 +71,6 @@ class DailySummaryReceiver : BroadcastReceiver() {
 
                 } finally {
 
-                    // Ставим следующий запуск на завтра 06:00
                     DailySummaryScheduler.schedule(context)
 
                     pendingResult.finish()

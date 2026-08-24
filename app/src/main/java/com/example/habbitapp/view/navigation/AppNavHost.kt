@@ -11,6 +11,7 @@ import com.example.habbitapp.view.ui.page.AddAimPage
 import com.example.habbitapp.view.ui.page.AddTaskPage
 import com.example.habbitapp.view.ui.page.AimsAndObjectibesPage
 import com.example.habbitapp.view.ui.page.LevelProductivityPage
+import com.example.habbitapp.view.ui.page.MainPageRoute
 import com.example.habbitapp.view.ui.page.SettingsPage
 import com.example.habbitapp.view.ui.page.UpdateAimPage
 import com.example.habbitapp.view.ui.page.UpdateTaskPage
@@ -25,22 +26,39 @@ fun AppNavHost(
     ) {
 
         composable(route = Destination.First.route) {
-            MainPage(
+
+            MainPageRoute(
+
                 toAddTaskPageClick = {
-                    navController.navigate(Destination.AddTask.route)
+                    navController.navigate(
+                        Destination.AddTask.route
+                    )
                 },
+
                 onTaskClick = { taskId ->
-                    navController.navigate(Destination.EditTask.passId(taskId))
-                }, toAimsAndObjectivesPageClick = {
-                    navController.navigate(Destination.AimsAndObjectives.route)
+                    navController.navigate(
+                        Destination.EditTask.passId(taskId)
+                    )
                 },
+
+                toAimsAndObjectivesPageClick = {
+                    navController.navigate(
+                        Destination.AimsAndObjectives.route
+                    )
+                },
+
                 toSettingsPage = {
-                    navController.navigate(Destination.Settings.route)
+                    navController.navigate(
+                        Destination.Settings.route
+                    )
                 },
+
                 toProductivityPage = {
-                    navController.navigate(Destination.Productivity.route)
+                    navController.navigate(
+                        Destination.Productivity.route
+                    )
                 }
-            ) 
+            )
         }
 
 

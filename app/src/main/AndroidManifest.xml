@@ -51,6 +51,11 @@
             android:exported="false" />
 
         <receiver
+            android:name=".model.utils.StatFailHabitReceiver"
+            android:exported="false" />
+
+
+        <receiver
             android:name=".model.utils.DailySummaryReceiver"
             android:exported="false" />
 
